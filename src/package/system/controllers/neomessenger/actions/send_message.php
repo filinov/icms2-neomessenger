@@ -81,14 +81,15 @@ class actionNeomessengerSendMessage extends cmsAction {
             $content_html = cmsEventsManager::hook('html_filter', $content);
 
             if ($content_html) {
+
                 $this->messenger->setSender($user->id);
                 $this->messenger->addRecipient($contact_id);
                 $this->messenger->sendMessage($content_html);
 
-                $is_online = $this->model->isOnline($contact_id);
+                $user_to = cmsCore::getModel('users')->getUser($contact_id);
 
-                if (!$is_online) {
-                    $this->messenger->sendNoticeEmail('messages_new', array());
+                if (!$user_to['is_online']) {
+                    $this->messenger->sendNoticeEmail('messages_new');
                 }
 
             }

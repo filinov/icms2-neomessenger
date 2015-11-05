@@ -1,6 +1,6 @@
 {
   "name": "neomessenger",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "Замена стандартной системы переписки для instantCMS 2.x",
   "repository": {
     "type": "git",

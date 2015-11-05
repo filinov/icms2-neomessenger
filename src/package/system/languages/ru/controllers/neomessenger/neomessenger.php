@@ -15,6 +15,6 @@ define('LANG_NEOMESSENGER_FLIP_BUTTONS',         'Поменять местам�
 define('LANG_NEOMESSENGER_MESSAGES_LIMIT',       'Выводить сообщений за раз');
 
 define('LANG_NEOMESSENGER_ADMIN_NOT_IGNORE',     'Вы не можете добавить администратора в черный список');
-define('LANG_NEOMESSENGER_NOTIFY_NEW',           'Уведомлять о новых сообщениях');
+
 define('LANG_NEOMESSENGER_PERMANENT_USERS',      'Эти пользователи всегда будут в списке контактов');
 define('LANG_NEOMESSENGER_PERMANENT_USERS_HINT', 'Указать id, или несколько через запятую');

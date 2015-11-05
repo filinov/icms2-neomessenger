@@ -31,11 +31,4 @@ class modelNeomessenger extends cmsModel {
 
     }
 
-    public function isOnline($user_id) {
-
-        return (bool) $this->getField('{users}', $user_id, 'is_online');
-
-    }
-
-
 }
