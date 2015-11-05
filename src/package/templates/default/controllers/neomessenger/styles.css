@@ -1,0 +1,737 @@
+.clearfix:before,
+.clearfix:after {
+  content: " ";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}
+.pull-right {
+  float: right !important;
+}
+.pull-left {
+  float: left !important;
+}
+.nm-hide {
+  display: none;
+}
+html.nm-opened,
+html.nm-opened body {
+  overflow: hidden;
+}
+#nm-dialog * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+#nm-dialog *:before,
+#nm-dialog *:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+#nm-overlay {
+  background-color: rgba(130, 130, 130, 0.4);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 500;
+  overflow: hidden;
+}
+#nm-dialog {
+  display: none;
+  color: #333;
+  font: 12px Tahoma, Helvetica, Arial, sans-serif;
+  width: 100%;
+  max-width: 800px;
+  min-width: 200px;
+  height: 100%;
+  max-height: 500px;
+  min-height: 200px;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  top: 0;
+  left: 0;
+  -webkit-box-shadow: 0 0 27px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 27px rgba(0, 0, 0, 0.4);
+}
+#nm-dialog a {
+  color: #428bca;
+  text-decoration: none;
+}
+#nm-dialog a:hover,
+#nm-dialog a:focus {
+  color: #2a6496;
+}
+.nm-header {
+  height: 38px;
+  line-height: 38px;
+  border-bottom: 1px solid #323C56;
+  position: relative;
+  background-image: -webkit-linear-gradient(top, #3498db 0%, #2980b9 100%);
+  background-image: -o-linear-gradient(top, #3498db 0%, #2980b9 100%);
+  background-image: linear-gradient(to bottom, #3498db 0%, #2980b9 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3498db', endColorstr='#ff2980b9', GradientType=0);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.nm-close {
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  cursor: pointer;
+}
+.nm-close:hover {
+  background-position: 0 -38px;
+}
+.nm-close {
+  background: url("/neomessenger/images/closeicon.png") no-repeat;
+  right: 0;
+}
+.nm-toggle {
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  cursor: pointer;
+  background: url("/neomessenger/images/toggler.png") no-repeat;
+  left: 0;
+  display: none;
+}
+.nm-title {
+  background: url("/neomessenger/images/mail_icon.png") center left no-repeat;
+  text-overflow: ellipsis;
+  position: absolute;
+  padding: 0 20px;
+  color: #fff;
+  left: 15px;
+  right: 38px;
+}
+.nm-body {
+  background-color: #fff;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 38px;
+}
+.nm-loading {
+  background: url("/neomessenger/images/load.gif") center center no-repeat;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.nm-nomess {
+  display: none;
+  text-align: center;
+  color: #225289;
+  font-size: 16px;
+  padding: 50px 10px;
+}
+.nm-content {
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+.nm-left {
+  width: 31%;
+  background: #fefefe;
+  float: left;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.nm-right {
+  height: 100%;
+  width: 69%;
+  float: left;
+  border-left: 1px solid #c3d0d8;
+}
+.nm-search-c-wrap {
+  height: 42px;
+  padding: 8px;
+  border-bottom: 1px solid #c3d0d8;
+  background-image: -webkit-linear-gradient(top, #f2f2f2 0%, #d9d9d9 100%);
+  background-image: -o-linear-gradient(top, #f2f2f2 0%, #d9d9d9 100%);
+  background-image: linear-gradient(to bottom, #f2f2f2 0%, #d9d9d9 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff2f2f2', endColorstr='#ffd9d9d9', GradientType=0);
+}
+.nm-inp-c-bl {
+  position: relative;
+  padding: 0 25px;
+  border: 1px solid #a7a7a7;
+  background: #fff;
+  border-radius: 6px;
+}
+#nm-search-inp {
+  width: 100%;
+  height: 23px;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+}
+.nm-search-icon {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 4px;
+  left: 6px;
+  background: url("/neomessenger/images/search.png") no-repeat;
+}
+#nm-search-clr {
+  display: none;
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 15px;
+  height: 15px;
+  background: url("/neomessenger/images/s_clear.png") no-repeat;
+  cursor: pointer;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+#nm-search-clr:hover {
+  opacity: 0.9;
+  filter: alpha(opacity=90);
+}
+#nm-userlist {
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
+}
+#nm-userlist li {
+  position: relative;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  height: 43px;
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #fff;
+  cursor: pointer;
+  box-shadow: inset 0 1px 1px #fff;
+  background-image: -webkit-linear-gradient(top, #fdfefe 0%, #edf5fa 100%);
+  background-image: -o-linear-gradient(top, #fdfefe 0%, #edf5fa 100%);
+  background-image: linear-gradient(to bottom, #fdfefe 0%, #edf5fa 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffdfefe', endColorstr='#ffedf5fa', GradientType=0);
+}
+#nm-userlist li .username {
+  position: relative;
+  left: 42px;
+  color: #225289;
+  font-size: 13px;
+  line-height: 43px;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#nm-userlist li .userpic {
+  position: absolute;
+  margin: 5px;
+}
+
+#nm-userlist li .userpic a {
+    width: 31px;
+    height: 31px;
+    display: block;
+    border-radius: 2px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+#nm-userlist li .userpic a::after,
+#nm-userlist li.nm-online .userpic a::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border: 5px solid #fc4100;
+    border-left-color: transparent;
+    border-bottom-color: transparent;
+}
+
+#nm-userlist li.nm-online .userpic a::after {
+    border: 5px solid #5cb85c;
+    border-left-color: transparent;
+    border-bottom-color: transparent;
+}
+
+/*
+#nm-userlist li .userpic img {
+
+}
+*/
+#nm-userlist li .counter {
+  margin: 11px 5px 0;
+  float: right;
+  min-width: 6px;
+  padding: 0 5px 0;
+  border: 1px solid;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.25);
+  font: 700 0.917em/1.455 Arial, sans-serif;
+  border-color: #f8471d #db310d #d62200;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  background-image: -webkit-linear-gradient(top, #ff6742 0%, #fc4100 100%);
+  background-image: -o-linear-gradient(top, #ff6742 0%, #fc4100 100%);
+  background-image: linear-gradient(to bottom, #ff6742 0%, #fc4100 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffff6742', endColorstr='#fffc4100', GradientType=0);
+}
+#nm-userlist li .delete {
+  float: right;
+  display: none;
+  background: url("/neomessenger/images/mdelicon.png");
+  height: 16px;
+  width: 16px;
+  cursor: pointer;
+  margin: 13px;
+}
+#nm-userlist li .delete:hover {
+  background-position: 0 -16px;
+}
+#nm-userlist li:hover,
+#nm-userlist li.selected {
+  color: #fff;
+  border-bottom: 1px solid #167cac;
+  border-top: 1px solid #2094ca;
+  box-shadow: none;
+  background-image: -webkit-linear-gradient(top, #1aaef3 0%, #0993d3 100%);
+  background-image: -o-linear-gradient(top, #1aaef3 0%, #0993d3 100%);
+  background-image: linear-gradient(to bottom, #1aaef3 0%, #0993d3 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff1aaef3', endColorstr='#ff0993d3', GradientType=0);
+}
+#nm-userlist li:hover .username,
+#nm-userlist li.selected .username {
+  color: #FFF;
+}
+#nm-userlist li:hover .counter {
+  display: none;
+}
+#nm-userlist li:hover .delete {
+  display: block;
+}
+#nm-userlist li .online_status {
+  display: block;
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  height: 10px;
+  width: 10px;
+  border: 1px solid #fff;
+  background: #fc4100;
+  border-radius: 100%;
+}
+#nm-userlist li._online .online_status {
+  background: #5cb85c;
+}
+#nm-msg-loading {
+  background: url("/neomessenger/images/preloader.gif") no-repeat center;
+  height: 100%;
+  display: none;
+}
+
+/* Contact Panel
+------------------------------------------------------------------------------- */
+
+#nm-contact-panel {
+  padding: 8px;
+  border-bottom: 1px solid #c3d0d8;
+  background-image: -webkit-linear-gradient(top, #f2f2f2 0%, #d9d9d9 100%);
+  background-image: -o-linear-gradient(top, #f2f2f2 0%, #d9d9d9 100%);
+  background-image: linear-gradient(to bottom, #f2f2f2 0%, #d9d9d9 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff2f2f2', endColorstr='#ffd9d9d9', GradientType=0);
+}
+
+#nm-contact-panel a {
+  overflow: hidden;
+}
+
+#nm-contact-panel a span {
+  display: block;
+  float: left;
+  height: 32px;
+  line-height: 32px;
+  margin-right: 4px;
+  overflow: hidden;
+}
+
+#nm-contact-panel .nm-cp-actions {
+  float: right;
+  line-height: 28px;
+}
+
+
+
+
+
+
+
+#nm-chat-wrapper {
+  display: none;
+  height: 100%;
+}
+#nm-chat-wrapper .older-loading {
+  display: block;
+  height: 40px;
+  background: url("/neomessenger/images/preloader.gif") no-repeat center;
+}
+
+/* Messages
+------------------------------------------------------------------------------ */
+
+.conversation-inner {
+  padding: 5px 0;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.conversation-item {
+  padding: 5px 10px;
+  position: relative;
+}
+
+.conversation-user {
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  float: left;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.15);
+}
+
+.conversation-user a {
+  width: 40px;
+  height: 40px;
+  display: block;
+  background: no-repeat center;
+}
+
+.conversation-body {
+  background: #f5f5f5;
+  border: 1px solid #d4d4d4;
+  font-size: 0.875em;
+  width: auto;
+  margin-left: 55px;
+  padding: 8px 10px;
+  position: relative;
+  border-radius: 4px;
+}
+
+.conversation-body:before,
+.conversation-body:after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: 10px;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+}
+
+.conversation-body:before {
+  left: -10px;
+  border-right: 10px solid #d4d4d4;
+}
+
+.conversation-body:after {
+  left: -9px;
+  border-right: 10px solid #f5f5f5;
+}
+
+.conversation-item.new .conversation-body {
+  background: #dceffc;
+}
+
+.conversation-item.item-right .conversation-body:before {
+  left: auto;
+  right: -21px;
+  border-right: 10px solid transparent;
+  border-left: 10px solid #d4d4d4;
+}
+
+.conversation-item.item-right .conversation-body:after {
+  left: auto;
+  right: -20px;
+  border-right: 10px solid transparent;
+  border-left: 10px solid #f5f5f5;
+}
+
+.conversation-item.new.item-left .conversation-body:after {
+  border-right: 10px solid #dceffc;
+}
+
+.conversation-item.item-right .conversation-user {
+  float: right;
+}
+
+.conversation-item.item-right .conversation-body {
+  margin-left: 0;
+  margin-right: 55px;
+}
+
+.conversation-body > .author {
+  font-weight: 600;
+  font-size: 1.125em;
+  color: #00bf00;
+}
+
+.conversation-item.item-right .conversation-body > .author {
+  color: #bf0000;
+}
+
+.conversation-body > .date {
+  position: absolute;
+  font-size: 0.875em;
+  right: 10px;
+  top: 0;
+  margin-top: 10px;
+  color: #999;
+  font-weight: 300;
+}
+
+.conversation-body > .delete {
+  background: url("/neomessenger/images/mdelicon.png");
+  height: 16px;
+  width: 16px;
+  position: absolute;
+  right: 6px;
+  top: 9px;
+  display: none;
+  cursor: pointer;
+}
+
+.conversation-body > .delete:hover {
+  background-position: 0 -16px;
+}
+
+.conversation-body > .msg-content {
+  padding-top: 6px;
+}
+
+.conversation-body > .msg-content .bb_tag_code {
+  background: #fff;
+  overflow-x: auto;
+}
+
+.conversation-body > .msg-content .bb_tag_video {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+}
+
+.conversation-body > .msg-content .bb_tag_video iframe,
+.conversation-body > .msg-content .bb_tag_video object,
+.conversation-body > .msg-content .bb_tag_video embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.conversation-body > .msg-content .forum_zoom {
+  width: auto !important;
+}
+
+.conversation-body > .msg-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+.nm-temp-msg-loading {
+  display: block;
+  height: 25px;
+  background: url("/neomessenger/images/preloader.gif") no-repeat center;
+}
+
+/* Форма отправки сообщений
+------------------------------------------------------------------------------ */
+
+#nm-composer {
+  background: #f1f5f8;
+  border-top: solid 1px #C3D0D8;
+  padding: 0 5px 5px;
+}
+
+#nm-composer .markItUpHeader * {
+  -webkit-box-sizing: content-box !important;
+  -moz-box-sizing: content-box !important;
+  box-sizing: content-box !important;
+}
+#nm-composer textarea {
+  outline: none;
+  width: 100%;
+  height: 64px;
+  max-height: 150px;
+  resize: none;
+  font: 12px Arial, Helvetica, sans-serif;
+  padding: 5px;
+  line-height: 18px;
+  overflow: auto;
+  border: solid 1px #c3d0d8;
+  color: #333;
+  border-radius: 2px;
+}
+#nm-composer .nm-buttons {
+  height: 30px;
+  line-height: 30px;
+  margin: 5px 0 0;
+}
+#nm-composer .nm-submit {
+  outline: 0;
+  margin: 0;
+  color: #fff;
+  cursor: pointer;
+  font-family: "Arial", sans-serif;
+  font-size: 12px;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 16px;
+  text-align: center;
+  text-shadow: 0 1px 0 #4272a6;
+  border: 1px solid #4386cc;
+  background-image: -webkit-linear-gradient(top, #6a9ed6 0%, #4a89cf 100%);
+  background-image: -o-linear-gradient(top, #6a9ed6 0%, #4a89cf 100%);
+  background-image: linear-gradient(to bottom, #6a9ed6 0%, #4a89cf 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff6a9ed6', endColorstr='#ff4a89cf', GradientType=0);
+  border-radius: 2px;
+  -webkit-box-shadow: inset 0 1px 0 #96bbe2;
+  box-shadow: inset 0 1px 0 #96bbe2;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+#nm-composer .nm-submit:hover {
+  background-color: #5598d8;
+  border: 1px solid #4386cc;
+  background-image: -webkit-linear-gradient(top, #6fa6dd 0%, #5397d7 100%);
+  background-image: -o-linear-gradient(top, #6fa6dd 0%, #5397d7 100%);
+  background-image: linear-gradient(to bottom, #6fa6dd 0%, #5397d7 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff6fa6dd', endColorstr='#ff5397d7', GradientType=0);
+}
+.emoji-menu {
+  position: absolute;
+  background: #fff;
+  width: 220px;
+  border: 1px solid #999;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px 2px rgba(217, 217, 217, 0.5);
+  right: 0;
+  bottom: 5px;
+  overflow: hidden;
+}
+.emoji-menu .emoji-items-wrap {
+  padding: 5px 2px 5px 5px;
+  position: relative;
+  max-height: 160px;
+  overflow: auto;
+}
+.emoji-menu .emoji-items {
+  padding-right: 8px;
+  outline: 0 !important;
+}
+.emoji-menu .emoji-items a {
+  margin: 4px;
+}
+.emoji-menu img {
+  padding: 2px;
+}
+.emoji-menu img:hover {
+  padding: 1px;
+  border-radius: 3px;
+  border: solid 1px #83BBD9;
+  background-color: #DFF2F9;
+}
+.emoji-menu:after {
+  content: ' ';
+  display: block;
+  clear: left;
+}
+.emoji-menu a .label {
+  display: none;
+}
+html.nm-mobile,
+html.nm-mobile body {
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+}
+.nm-mobile #nm-dialog {
+  max-height: none;
+  max-width: none;
+  margin: 0;
+  border-radius: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.nm-mobile .nm-close {
+  background-position: 0 -38px;
+}
+@media (max-width: 520px) {
+  .nm-content > .nm-left {
+    width: 40%;
+  }
+  .nm-content > .nm-right {
+    width: 60%;
+  }
+}
+@media (max-width: 479px) {
+  .nm-title {
+    text-align: center;
+    font-weight: bold;
+    background: none;
+  }
+  .nm-content > .nm-left {
+    width: 100%;
+  }
+  .nm-content > .nm-right {
+    display: none;
+  }
+  .nm-contacts-open .nm-content > .nm-left {
+    display: none;
+  }
+  .nm-contacts-open .nm-content > .nm-right {
+    width: 100%;
+    display: block;
+    border-left: none;
+  }
+  .nm-contacts-open .nm-toggle {
+    background-position: 0 -38px;
+  }
+  .nm-contacts-loaded.nm-selected .nm-toggle {
+    display: block;
+  }
+  .nm-contacts-loaded.nm-selected .nm-title {
+    left: 38px;
+  }
+}
+
+.nm-contact-ignored {
+  float: right;
+  background: url("/neomessenger/images/lock.png");
+  height: 16px;
+  width: 16px;
+  margin: 13px;
+}

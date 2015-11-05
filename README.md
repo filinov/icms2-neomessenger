@@ -1,1 +1,1 @@
-# neomessenger-icms2.x
+# neomessenger for icms2.x
