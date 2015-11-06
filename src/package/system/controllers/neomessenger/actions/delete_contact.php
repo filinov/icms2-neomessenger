@@ -4,8 +4,6 @@ class actionNeomessengerDeleteContact extends cmsAction {
 
     public function run() {
 
-        if (!$this->request->isAjax()) { cmsCore::error404(); }
-
         $user = cmsUser::getInstance();
         $template = cmsTemplate::getInstance();
 
@@ -22,8 +20,6 @@ class actionNeomessengerDeleteContact extends cmsAction {
         $template->renderJSON(array(
             'error' => false
         ));
-
-
 
     }
 

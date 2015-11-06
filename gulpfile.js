@@ -23,7 +23,7 @@ gulp.task('clean', function () {
 
 gulp.task('build', ['update-manifest'], function () {
     return gulp.src('**/*', {cwd:  path.join(process.cwd(), '/src')})
-        .pipe(zip('neomessenger_v' + pj.version + '.zip'))
+        .pipe(zip('neomessenger_' + getFormatDate() + '_v' + pj.version + '.zip'))
         .pipe(gulp.dest('dist'));
 });
 

@@ -13,6 +13,22 @@ class neomessenger extends cmsFrontend {
 
     }
 
+    /**
+     * Все запросы могут быть выполнены только авторизованными и только по аякс
+     * @param type $action_name
+     */
+    public function before($action_name) {
+
+        parent::before($action_name);
+
+        if (!$this->request->isAjax()) { cmsCore::error404(); }
+
+        if (!cmsUser::isLogged()) { cmsCore::error404(); }
+
+        return true;
+
+    }
+
     public function addPluginToPage() {
 
         $template = cmsTemplate::getInstance();

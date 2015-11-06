@@ -870,6 +870,8 @@ icms.neomessenger = (function ($) {
                 $chat.append(tempMsgHtml);
                 self.scroll();
 
+                self.setReaded();
+
                 nm.post('send_message', form_data, function (result) {
 
                     var newMessagesCount = 0,

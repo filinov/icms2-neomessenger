@@ -4,17 +4,13 @@ class actionNeomessengerGetUpdate extends cmsAction {
 
     public function run() {
 
-        if (!$this->request->isAjax()) { cmsCore::error404(); }
-
         $template = cmsTemplate::getInstance();
         $user = cmsUser::getInstance();
 
         $contact_id = $this->request->get('contact_id');
         $message_last_id = $this->request->get('message_last_id');
 
-        $_contacts = $this->messenger->model
-            ->select('u.is_online', 'is_online')
-            ->getContacts($user->id);
+        $_contacts = $this->messenger->model->getContacts($user->id);
 
         $contacts = array();
 
@@ -23,7 +19,7 @@ class actionNeomessengerGetUpdate extends cmsAction {
 
                 $contact['id'] = $contact['contact_id'];
                 $contact['url'] = href_to('users', $contact['contact_id']);
-                $contact['is_online'] = (bool) $contact['is_online'];
+                $contact['is_online'] = cmsUser::userIsOnline($contact['contact_id']);
                 $contact['avatar'] = $this->getAvatar($contact['avatar'], 'micro');
 
                 $contacts[] = $contact;

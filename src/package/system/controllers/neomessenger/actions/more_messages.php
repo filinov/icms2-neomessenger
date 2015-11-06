@@ -4,10 +4,6 @@ class actionNeomessengerMoreMessages extends cmsAction {
 
     public function run() {
 
-        if (!$this->request->isAjax()) {
-            cmsCore::error404();
-        }
-
         $template = cmsTemplate::getInstance();
         $user = cmsUser::getInstance();
 
