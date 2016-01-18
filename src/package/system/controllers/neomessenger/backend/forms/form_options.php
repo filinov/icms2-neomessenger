@@ -49,6 +49,23 @@ class formNeomessengerOptions extends cmsForm {
                 'type' => 'fieldset',
                 'childs' => array(
 
+                    new fieldCheckbox('is_title_count', array(
+                        'title' => LANG_NEOMESSENGER_TITLE_COUNT,
+                        'default' => 1
+                    )),
+
+                    new fieldCheckbox('is_favicon_count', array(
+                        'title' => LANG_NEOMESSENGER_FAVICON_COUNT,
+                        'default' => 1
+                    )),
+
+                )
+            ),
+
+            array(
+                'type' => 'fieldset',
+                'childs' => array(
+
                     new fieldNumber('messages_limit', array(
                         'title' => LANG_NEOMESSENGER_MESSAGES_LIMIT,
                         'default' => 20,

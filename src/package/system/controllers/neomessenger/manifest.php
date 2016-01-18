@@ -3,7 +3,7 @@
 return array(
 
     'hooks' => array(
-        'menu_messages'
+        'before_print_head'
     )
 
 );

@@ -2,22 +2,21 @@
 
 function install_package() {
 
-    $core = cmsCore::getInstance();
+    $model = new cmsModel();
 
-    $is_installed = $core->db->getRowsCount('controllers', 'name = "neomessenger"', 1);
+    $model->filterEqual('name', 'neomessenger')->updateFiltered('controllers', array(
+        'is_external' => 1
+    ));
 
-    if (!$is_installed) {
+    return true;
 
-        $core->db->insert('controllers', array(
-            'title' => 'Неомессенджер',
-            'name'  => 'neomessenger',
-            'is_enabled' => 1,
-            'options' => '---',
-            'author' => 'NEOm@ster',
-            'url' => 'http://www.instantcms.ru/users/neomaster',
-            'version' => '2.2',
-            'is_backend' => 1
-        ));
+}
+
+function after_install_package() {
+
+    if (file_exists(cmsConfig::get('root_path') . 'neomessenger')) {
+
+        cmsUser::addSessionMessage(LANG_NEOMESSENGER_AFTER_INSTALL_MSG, 'error');
 
     }
 

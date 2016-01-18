@@ -1,11 +1,11 @@
 'use strict';
 
-var gulp = require('gulp'),
-    replace = require('gulp-replace'),
-    path = require('path'),
-    zip = require('gulp-zip'),
-    del = require('del'),
-    pj = require('./package.json');
+var gulp    = require('gulp');
+var replace = require('gulp-replace');
+var path    = require('path');
+var zip     = require('gulp-zip');
+var del     = require('del');
+var pj      = require('./package.json');
 
 function getFormatDate () {
     var date = new Date();

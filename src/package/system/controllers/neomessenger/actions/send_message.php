@@ -4,15 +4,13 @@ class actionNeomessengerSendMessage extends cmsAction {
 
     public function run() {
 
-        if (!$this->request->isAjax()) { cmsCore::error404(); }
-
         $template = cmsTemplate::getInstance();
-        $user = cmsUser::getInstance();
+        $user     = cmsUser::getInstance();
 
-        $contact_id = $this->request->get('contact_id');
-        $content = $this->request->get('content');
-        $last_id = $this->request->get('last_id');
-
+        $contact_id  = $this->request->get('contact_id');
+        $content     = $this->request->get('content');
+        $last_id     = $this->request->get('last_id');
+        $csrf_token  = $this->request->get('csrf_token');
         $is_massmail = $this->request->get('massmail');
 
         // Массовая рассылка
@@ -49,7 +47,7 @@ class actionNeomessengerSendMessage extends cmsAction {
         } else {
 
             // Проверяем валидность
-            $is_valid = is_numeric($contact_id);
+            $is_valid = is_numeric($contact_id) && cmsForm::validateCSRFToken($csrf_token, false);
 
             if (!$is_valid) {
                 $template->renderJSON(array('error' => true));
@@ -95,43 +93,13 @@ class actionNeomessengerSendMessage extends cmsAction {
             }
 
             //  Получаем если есть предыдущие сообщения + только-что отправленное
-            $_messages = $this->model
+            $messages = $this->model
                 ->filterGt('id', $last_id)
                 ->getMessages($user->id, $contact_id);
 
-            $messages = array();
-
-            if ($_messages) {
-
-                $users_model = cmsCore::getModel('users');
-
-                $users_cache = array();
-
-                foreach ($_messages as $message) {
-
-                    if (isset($users_cache[$message['from_id']])) {
-                        $_user = $users_cache[$message['from_id']];
-                    } else {
-                        $_user = $users_model->getUser($message['from_id']);
-                        $users_cache[$_user['id']] = $_user;
-                    }
-
-                    $message['user'] = array(
-                        'id' => $_user['id'],
-                        'nickname' => $_user['nickname'],
-                        'url' => href_to('users', $_user['id']),
-                        'avatar' => self::getAvatar($_user['avatar'], 'micro')
-                    );
-
-                    $messages[] = $message;
-
-                }
-
-            }
-
             $template->renderJSON(array(
                 'error' => false,
-                'messages' => $messages ? $messages : false
+                'messages' => $messages ? array_values($messages) : false
             ));
 
         }

@@ -11,6 +11,7 @@ icms.neomessenger = (function ($) {
         onDocumentReady: function() {
 
             this.isMobile      = isMobile.any;
+            this.favicon       = this.initFavicon();
 
             this.recipientId   = 0;
             this.options       = {};
@@ -29,6 +30,28 @@ icms.neomessenger = (function ($) {
 
             this.bindEvents();
             this.setRefresh(true);
+
+        },
+
+        initFavicon: function () {
+
+            var options = {
+                animation:'popFade'
+            };
+
+            return new Favico(options);
+
+        },
+
+        setFavicon: function (value) {
+
+            if (value) {
+                this.favicon.badge(value);
+            }
+
+            if (!value) {
+                this.favicon.reset();
+            }
 
         },
 
@@ -183,6 +206,7 @@ icms.neomessenger = (function ($) {
 
                     if (nm.abortRefresh) {
                         nm.abortRefresh = false;
+                        nm.setRefresh();
                         return;
                     }
 
@@ -208,8 +232,21 @@ icms.neomessenger = (function ($) {
                         if (result.messages) {
 
                             $.each(result.messages, function () {
-                                nm.messages.add(this);
-                                nm.messages.lastId = this.id;
+                                if (this.from_id == nm.contacts.current.id) {
+                                    nm.messages.add(this);
+                                }
+
+                                if (this.id > nm.messages.lastId) {
+                                    nm.messages.lastId = this.id;
+                                }
+
+                                nm.notificationsManager.notify({
+                                    title: this.user.nickname,
+                                    tag: 'nm_msg' + this.user.id,
+                                    image: this.user.avatar,
+                                    message: this.content,
+                                    contact_id: this.user.id
+                                });
                             });
 
                             $('#nm-chat').waitForImages({
@@ -296,16 +333,26 @@ icms.neomessenger = (function ($) {
             var $button = $('li.messages-counter');
 
             $('.counter', $button).remove();
-            $.animateTitle('clear');
 
             if (value > 0) {
                 var html = '<span class="counter">' + value + '</span>';
                 $('a', $button).append(html);
-                $.animateTitle(['*********************', 'У вас ' + nm.plural(value, '%d непрочитанное сообщение', '%d непрочитанных сообщения', '%d непрочитанных сообщений')], 1000);
+
+                if (nm.options.is_title_count) {
+                    $.animateTitle('clear');
+                    $.animateTitle(['*********************', 'У вас ' + nm.plural(value, '%d непрочитанное сообщение', '%d непрочитанных сообщения', '%d непрочитанных сообщений')], 1000);
+                }
 
                 if (value > nm.messagesCount) {
-                    nm.playSound();
+                    nm.notificationsManager.playSound();
                 }
+
+            } else {
+                $.animateTitle('clear');
+            }
+
+            if (nm.options.is_favicon_count) {
+                nm.setFavicon(value);
             }
 
             nm.messagesCount = value;
@@ -328,16 +375,20 @@ icms.neomessenger = (function ($) {
             });
 
             $('.counter', $button).remove();
-            $.animateTitle('clear');
 
             if (value > 0) {
                 var html = '<span class="counter">' + value + '</span>';
                 $('a', $button).append(html);
-                $.animateTitle(['*********************', 'У вас ' + nm.plural(value, '%d непрочитанное уведомление', '%d непрочитанных уведомления', '%d непрочитанных уведомлений')], 1000);
+
+                if (nm.options.is_title_count) {
+                    $.animateTitle('clear');
+                    $.animateTitle(['*********************', 'У вас ' + nm.plural(value, '%d непрочитанное уведомление', '%d непрочитанных уведомления', '%d непрочитанных уведомлений')], 1000);
+                }
 
                 if (value > nm.noticesCount) {
-                    nm.playSound();
+                    nm.notificationsManager.playSound();
                 }
+
             }
 
             nm.noticesCount = value;
@@ -349,6 +400,7 @@ icms.neomessenger = (function ($) {
 
             nm.modal.show();
             nm.contacts.load(nm.recipientId);
+            nm.notificationsManager.start();
 
         },
 
@@ -374,6 +426,8 @@ icms.neomessenger = (function ($) {
                     if (!result.error) {
 
                         if (result.contacts) {
+
+                            nm.messages.lastId = result.message_last_id || 0;
 
                             $.each(result.contacts, function() {
                                 self.add(this);
@@ -667,8 +721,9 @@ icms.neomessenger = (function ($) {
 
             _sendLock: false,
             oldLoading: false,
-            lastId: false,
+            lastId: 0,
             firstId: false,
+            csrf_token: null,
 
             load: function(id) {
 
@@ -679,7 +734,7 @@ icms.neomessenger = (function ($) {
                 $('#nm-chat').html('').unbind('scroll');
                 $('#editor-nm-msg-field').val(nm.draft.get(id));
 
-                this.lastId = false;
+                //this.lastId = 0;
                 this.older_id = false;
                 this._sendLock = false;
                 this.oldLoading = false;
@@ -691,6 +746,7 @@ icms.neomessenger = (function ($) {
 
                     if (!result.error) {
 
+                        self.csrf_token = result.csrf_token;
                         var messages = result.messages;
 
                         $('#nm-contact-panel').html(nm.render.contactPanel(nm.contacts.current));
@@ -700,9 +756,10 @@ icms.neomessenger = (function ($) {
                         if (messages) {
                             $.each(messages, function () {
                                 self.add(this);
+                                if (this.id > self.lastId) {
+                                    self.lastId = this.id;
+                                }
                             });
-
-                            self.lastId = messages[messages.length - 1].id;
 
                             if (result.has_older) {
                                 self.older_id = result.older_id;
@@ -825,6 +882,8 @@ icms.neomessenger = (function ($) {
 
             send: function(mass) {
 
+                nm.notificationsManager.notificationsClear();
+
                 if (this._sendLock) { return; }
 
                 var self = nm.messages,
@@ -851,7 +910,8 @@ icms.neomessenger = (function ($) {
                 var form_data = {
                     contact_id: to_id,
                     content: content,
-                    last_id: this.lastId
+                    last_id: this.lastId,
+                    csrf_token: this.csrf_token
                 };
 
                 var tempMsgHtml = nm.render.message({
@@ -896,7 +956,9 @@ icms.neomessenger = (function ($) {
                                     newMessagesCount++;
                                 }
                                 self.add(message);
-                                self.lastId = message.id;
+                                if (message.id > self.lastId) {
+                                    self.lastId = message.id;
+                                }
                             }
 
                             if (newMessagesCount) {
@@ -1076,17 +1138,93 @@ icms.neomessenger = (function ($) {
 
         },
 
-        // Звуковое оповещение
-        playSound: function () {
-            var audio = null;
-            if (typeof Audio !== "undefined") {
-                audio = new Audio("/neomessenger/sounds/notify.ogg");
-                if (!audio.canPlayType('/audio/ogg')) {
-                    audio = new Audio("/neomessenger/sounds/notify.mp3");
+        // Управление уведомлениями
+        notificationsManager: (function () {
+
+            var Notification = window.Notification || window.mozNotification || window.webkitNotification;
+
+            var notifications = {};
+            var nextSoundAt   = false;
+
+            function start() {
+
+                if (Notification && Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+                    Notification.requestPermission();
                 }
-                audio.play();
+
             }
-        },
+
+            function notificationsClear () {
+
+                $.each(notifications, function () {
+                    this.close();
+                });
+
+                notifications = {};
+
+            }
+
+            function notify (data) {
+
+                if (Notification.permission !== 'granted') { return; }
+
+                try {
+
+                    var notification = new Notification(data.title, {
+                        body: data.message,
+                        icon: data.image,
+                        tag: data.tag
+                    });
+
+                    notification.onclick = function () {
+                        notification.close();
+                        window.focus();
+                        notificationsClear();
+                        nm.contacts.select(data.contact_id);
+                    };
+
+                    notification.onclose = function () {
+                        notificationsClear();
+                    };
+
+                    notifications[data.tag] = notification;
+
+                } catch (e) {
+                    console.log(e);
+                }
+
+            }
+
+            function playSound () {
+
+                var now = +new Date();
+
+                if (nextSoundAt && now < nextSoundAt) {
+                    return;
+                }
+
+                nextSoundAt = now + 1000;
+
+                var audio = null;
+
+                if (typeof Audio !== "undefined") {
+                    audio = new Audio(nm.soundsPath + "notify.ogg");
+                    if (!audio.canPlayType('/audio/ogg')) {
+                        audio = new Audio(nm.soundsPath + "notify.mp3");
+                    }
+                    audio.play();
+                }
+
+            }
+
+            return {
+                start: start,
+                notify: notify,
+                playSound: playSound,
+                notificationsClear: notificationsClear
+            }
+
+        })(),
 
         // Вьюпорт
         viewport: {

@@ -7,7 +7,7 @@ class actionNeomessengerGetContacts extends cmsAction {
         $template = cmsTemplate::getInstance();
         $user = cmsUser::getInstance();
 
-        $is_allowed = $user->isInGroups($this->options['groups_allowed']);
+        $is_allowed = $user->isInGroups($this->options['groups_allowed'] || array());
 
         if (!$is_allowed) {
             $template->renderJSON(array('error' => true));
@@ -53,27 +53,14 @@ class actionNeomessengerGetContacts extends cmsAction {
 
         }
 
-        $_contacts = $this->messenger->model->getContacts($user->id);
+        $contacts = $this->model->getContacts($user->id);
 
-        $contacts = array();
-
-        if ($_contacts) {
-            foreach ($_contacts as $contact) {
-
-                $contact['id'] = $contact['contact_id'];
-                $contact['is_online'] = cmsUser::userIsOnline($contact['contact_id']);
-                $contact['url'] = href_to('users', $contact['contact_id']);
-                $contact['avatar'] = $this->getAvatar($contact['avatar'], 'micro');
-                $contact['is_ignored'] = (bool)$this->messenger->model->isContactIgnored($user->id, $contact['contact_id']);
-
-                $contacts[] = $contact;
-
-            }
-        }
+        $message_last_id = $this->model->getLastMessageID($user->id);
 
         $template->renderJSON(array(
             'error' => false,
-            'contacts' => $contacts ? $contacts : false
+            'contacts' => $contacts ? array_values($contacts) : false,
+            'message_last_id' => $message_last_id
         ));
 
     }

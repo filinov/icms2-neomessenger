@@ -91,7 +91,7 @@ html.nm-opened body {
   background-position: 0 -38px;
 }
 .nm-close {
-  background: url("/neomessenger/images/closeicon.png") no-repeat;
+  background: url("../../images/neomessenger/closeicon.png") no-repeat;
   right: 0;
 }
 .nm-toggle {
@@ -99,12 +99,12 @@ html.nm-opened body {
   width: 38px;
   height: 38px;
   cursor: pointer;
-  background: url("/neomessenger/images/toggler.png") no-repeat;
+  background: url("../../images/neomessenger/toggler.png") no-repeat;
   left: 0;
   display: none;
 }
 .nm-title {
-  background: url("/neomessenger/images/mail_icon.png") center left no-repeat;
+  background: url("../../images/neomessenger/mail_icon.png") center left no-repeat;
   text-overflow: ellipsis;
   position: absolute;
   padding: 0 20px;
@@ -120,7 +120,7 @@ html.nm-opened body {
   padding-bottom: 38px;
 }
 .nm-loading {
-  background: url("/neomessenger/images/load.gif") center center no-repeat;
+  background: url("../../images/neomessenger/load.gif") center center no-repeat;
   width: 100%;
   height: 100%;
   display: block;
@@ -183,7 +183,7 @@ html.nm-opened body {
   height: 16px;
   top: 4px;
   left: 6px;
-  background: url("/neomessenger/images/search.png") no-repeat;
+  background: url("../../images/neomessenger/search.png") no-repeat;
 }
 #nm-search-clr {
   display: none;
@@ -192,7 +192,7 @@ html.nm-opened body {
   right: 4px;
   width: 15px;
   height: 15px;
-  background: url("/neomessenger/images/s_clear.png") no-repeat;
+  background: url("../../images/neomessenger/s_clear.png") no-repeat;
   cursor: pointer;
   opacity: 0.5;
   filter: alpha(opacity=50);
@@ -294,7 +294,7 @@ html.nm-opened body {
 #nm-userlist li .delete {
   float: right;
   display: none;
-  background: url("/neomessenger/images/mdelicon.png");
+  background: url("../../images/neomessenger/mdelicon.png");
   height: 16px;
   width: 16px;
   cursor: pointer;
@@ -319,9 +319,6 @@ html.nm-opened body {
 #nm-userlist li.selected .username {
   color: #FFF;
 }
-#nm-userlist li:hover .counter {
-  display: none;
-}
 #nm-userlist li:hover .delete {
   display: block;
 }
@@ -340,7 +337,7 @@ html.nm-opened body {
   background: #5cb85c;
 }
 #nm-msg-loading {
-  background: url("/neomessenger/images/preloader.gif") no-repeat center;
+  background: url("../../images/neomessenger/preloader.gif") no-repeat center;
   height: 100%;
   display: none;
 }
@@ -389,7 +386,7 @@ html.nm-opened body {
 #nm-chat-wrapper .older-loading {
   display: block;
   height: 40px;
-  background: url("/neomessenger/images/preloader.gif") no-repeat center;
+  background: url("../../images/neomessenger/preloader.gif") no-repeat center;
 }
 
 /* Messages
@@ -507,7 +504,7 @@ html.nm-opened body {
 }
 
 .conversation-body > .delete {
-  background: url("/neomessenger/images/mdelicon.png");
+  background: url("../../images/neomessenger/mdelicon.png");
   height: 16px;
   width: 16px;
   position: absolute;
@@ -559,7 +556,7 @@ html.nm-opened body {
 .nm-temp-msg-loading {
   display: block;
   height: 25px;
-  background: url("/neomessenger/images/preloader.gif") no-repeat center;
+  background: url("../../images/neomessenger/preloader.gif") no-repeat center;
 }
 
 /* Форма отправки сообщений
@@ -730,7 +727,7 @@ html.nm-mobile body {
 
 .nm-contact-ignored {
   float: right;
-  background: url("/neomessenger/images/lock.png");
+  background: url("../../images/neomessenger/lock.png");
   height: 16px;
   width: 16px;
   margin: 13px;

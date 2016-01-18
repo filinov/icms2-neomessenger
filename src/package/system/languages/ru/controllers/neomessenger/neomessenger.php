@@ -18,3 +18,7 @@ define('LANG_NEOMESSENGER_ADMIN_NOT_IGNORE',     'Вы не можете доб�
 
 define('LANG_NEOMESSENGER_PERMANENT_USERS',      'Эти пользователи всегда будут в списке контактов');
 define('LANG_NEOMESSENGER_PERMANENT_USERS_HINT', 'Указать id, или несколько через запятую');
+
+define('LANG_NEOMESSENGER_AFTER_INSTALL_MSG',    'Удалите папку "neomessenger" в корне сайта');
+define('LANG_NEOMESSENGER_TITLE_COUNT',          'Мигать в заголовке браузера количеством сообщений');
+define('LANG_NEOMESSENGER_FAVICON_COUNT',        'Отображать количество не прочитанных сообщений на фавиконке');
