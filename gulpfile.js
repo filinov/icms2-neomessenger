@@ -1,38 +1,20 @@
 'use strict';
 
-var gulp    = require('gulp');
-var replace = require('gulp-replace');
-var path    = require('path');
-var zip     = require('gulp-zip');
-var del     = require('del');
-var pj      = require('./package.json');
+var gulp     = require('gulp');
+var template = require('gulp-template-compile');
+var replace  = require('gulp-replace');
+var concat   = require('gulp-concat');
 
-function getFormatDate () {
-    var date = new Date();
-    var dd = date.getDate();
-    if (dd < 10) dd = "0" + dd;
-    var mm = date.getMonth() + 1;
-    if (mm < 10) mm = "0" + mm;
-    var yy = date.getFullYear();
-    return "" + yy + mm + dd;
-};
-
-gulp.task('clean', function () {
-    return del('dist/*');
+gulp.task('templates', function () {
+    gulp.src('src/templates/*.html')
+        .pipe(template({
+            namespace: 'icms.neomessenger.templates',
+            name: function (file) {
+                return file.relative.replace('.html', '');
+            }
+        }))
+        .pipe(concat('templates.js'))
+        .pipe(gulp.dest('package/templates/default/controllers/neomessenger/js/'));
 });
 
-gulp.task('build', ['update-manifest'], function () {
-    return gulp.src('**/*', {cwd:  path.join(process.cwd(), '/src')})
-        .pipe(zip('neomessenger_' + getFormatDate() + '_v' + pj.version + '.zip'))
-        .pipe(gulp.dest('dist'));
-});
-
-gulp.task('update-manifest', function () {
-    return gulp.src('src/manifest.*.ini')
-        .pipe(replace(/date = ".*"/, 'date = "' + getFormatDate() + '"'))
-        .pipe(gulp.dest('src/'));
-});
-
-gulp.task('default', ['clean'], function () {
-    gulp.start('build');
-});
+gulp.task('default', ['templates'], function () {});

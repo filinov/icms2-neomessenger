@@ -1,0 +1,24 @@
+<div class="nm-contactpanel-contact">
+    <a href="<%= contact.url %>">
+        <div class="nm-contact-image-wrap">
+
+            <% if (contact.is_online) { %>
+                <div class="nm-online-status"></div>
+            <% } %>
+
+            <div class="nm-contact-image">
+                <img src="<%= contact.avatar %>">
+            </div>
+
+            <div class="nm-contact-nickname"><%= contact.nickname %></div>
+
+        </div>
+    </a>
+</div>
+
+<div class="nm-cp-actions">
+    <input type="button" class="nm-button nm-button-small" value="<% if (contact.is_ignored) { %><%= LANG_NEOMESSENGER_CONTACT_FORGIVE %><% } else { %><%= LANG_NEOMESSENGER_CONTACT_IGNORE %><% } %>" onclick="icms.neomessenger.contacts.<% if (contact.is_ignored) { %>forgive<% } else { %>ignore<% } %>(<%= contact.id %>)">
+    <input type="button" class="nm-button nm-button-small" value="<%= LANG_DELETE %>" onclick="icms.neomessenger.contacts.remove(<%= contact.id %>)">
+</div>
+
+<div class="clearfix"></div>

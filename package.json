@@ -1,6 +1,6 @@
 {
   "name": "neomessenger",
-  "version": "2.3.1",
+  "version": "2.4.0",
   "description": "Замена стандартной системы переписки для instantCMS 2.x",
   "repository": {
     "type": "git",
@@ -8,9 +8,9 @@
   },
   "author": "NEOm@ster",
   "devDependencies": {
-    "del": "^2.0.2",
     "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
     "gulp-replace": "^0.5.4",
-    "gulp-zip": "^3.0.2"
+    "gulp-template-compile": "^1.2.2"
   }
 }

@@ -1,0 +1,25 @@
+<li id="nm-contact<%= user.id %>" class="user_contact" rel="<%= user.id %>">
+
+    <% if (user.new_messages > 0) { %>
+        <span class="counter" rel="<%= user.new_messages %>"><%= user.new_messages %></span>
+    <% } %>
+
+    <% if (user.is_ignored) { %>
+        <div class="nm-contact-ignored"></div>
+    <% } %>
+
+    <div class="nm-contact-image-wrap">
+
+        <% if (user.is_online) { %>
+            <div class="nm-online-status"></div>
+        <% } %>
+
+        <div class="nm-contact-image">
+            <img src="<%= user.avatar %>">
+        </div>
+
+    </div>
+
+    <div class="username"><%= user.nickname %></div>
+
+</li>

@@ -1,0 +1,40 @@
+<%
+
+    var className = 'conversation-item clearfix';
+
+    if (is_my) {
+        className += ' item-right';
+    } else {
+        className += ' item-left';
+    }
+
+    if (is_new) {
+        className += ' new'
+    }
+
+    var temp = temp || false;
+
+%>
+
+<div id="nm-message-<%= msg.id %>" class="<%= className %>" rel="<%= msg.id %>">
+
+    <div class="conversation-user">
+        <img src="<%= msg.user.avatar %>" class="nm-message-user-photo">
+    </div>
+
+    <div class="conversation-body">
+
+        <% if (!temp) { %>
+            <div class="author"><%= msg.user.nickname %></div>
+        <% } %>
+
+        <div class="msg-content">
+            <% if (!temp) { %>
+                <div class="nm-message-time"><span><%= msg.time %></span></div>
+            <% } %>
+            <span class="nm-message-text"><%= msg.content %></span>
+        </div>
+
+    </div>
+
+</div>

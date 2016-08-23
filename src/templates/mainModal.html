@@ -1,0 +1,51 @@
+<div id="nm-overlay">
+    <div id="nm-dialog">
+
+        <div class="nm-header">
+            <div class="nm-toggle nm-icon-hamburger-wrap">
+                <span class="nm-icon-bar"></span>
+                <span class="nm-icon-bar"></span>
+                <span class="nm-icon-bar"></span>
+            </div>
+            <div class="nm-title"><%= LANG_NEOMESSENGER_MAIN_TITLE %></div>
+            <div class="nm-close"></div>
+        </div>
+
+        <div class="nm-body">
+            <div class="nm-loading"></div>
+            <div class="nm-nomess"><%= LANG_NEOMESSENGER_NO_MESS %></div>
+            <div class="nm-content">
+
+                <div class="nm-left">
+
+                    <div class="nm-search-c-wrap">
+                        <div class="nm-inp-c-bl">
+                            <div class="nm-search-icon"></div>
+                            <input type="text" id="nm-search-inp" value="" placeholder="<%= LANG_NEOMESSENGER_SEARCH_PLACEHOLDER %>">
+                            <div id="nm-search-clr"></div>
+                        </div>
+                    </div>
+
+                    <ul id="nm-userlist"></ul>
+
+                </div>
+
+                <div class="nm-right">
+                    <div id="nm-msg-loading"></div>
+                    <div id="nm-chat-wrapper">
+                        <div id="nm-contact-panel"></div>
+                        <div id="nm-chat" class="conversation-inner"></div>
+                        <div id="nm-composer">
+                            <%= htmlEditor %>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
