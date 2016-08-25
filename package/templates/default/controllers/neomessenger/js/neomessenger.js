@@ -26,18 +26,16 @@ icms.neomessenger = (function ($) {
     // Инициализация мессенджера
     this.onDocumentReady = function() {
 
+        this.options     = nm.options;
+        this.currentUser = nm.currentUser;
+        this.htmlEditor  = nm.htmlEditor;
+
         this.isMobile    = this.detectMobile();
         this.isRetina    = this.detectRetina();
         this.favicon     = this.initFavicon();
 
         this.recipientId = 0;
-        this.options     = nm.options;
-        this.currentUser = nm.currentUser;
-        this.htmlEditor  = nm.htmlEditor;
-        this.timeOffset  = 0;
-
         this.messagesCount = 0;
-        this.noticesCount  = 0;
 
         this.isRefreshEnabled = true;
         this.refreshTimer     = null;
@@ -58,6 +56,7 @@ icms.neomessenger = (function ($) {
 
     /* ------------------------------------------------------------------------- */
 
+    // Определение дисплея высокой четкости
     this.detectRetina = function () {
         return window.devicePixelRatio > 1;
     };
@@ -65,13 +64,7 @@ icms.neomessenger = (function ($) {
     /* ------------------------------------------------------------------------- */
 
     this.initFavicon = function () {
-
-        var options = {
-            animation:'popFade'
-        };
-
-        return new Favico(options);
-
+        return app.options.is_favicon_count ? new Favico({ animation:'popFade' }) : false;
     };
 
     /* ------------------------------------------------------------------------- */
@@ -94,7 +87,7 @@ icms.neomessenger = (function ($) {
     // Привязка обработчиков событий
     this.bindEvents = function() {
 
-        var $msgButton = $('li.messages a');
+        var $msgButton = $('a[href="/messages"], a[href^="/messages/write/"]');
 
         // Отписываем nyromodal от сообщений
         $msgButton.unbind('click.nyroModal');
@@ -237,7 +230,6 @@ icms.neomessenger = (function ($) {
                 if (!result.error) {
 
                     app.setMessagesCounter(result.messagesCount);
-                    //app.setNoticesCounter(result.noticesCount);
 
                     if (result.contacts) {
 
@@ -301,7 +293,6 @@ icms.neomessenger = (function ($) {
                 if (!result.error) {
 
                     app.setMessagesCounter(result.messagesCount);
-                    //app.setNoticesCounter(result.noticesCount);
 
                 } else {
                     console.log('Ошибка получения количества новых сообщений');
@@ -371,7 +362,9 @@ icms.neomessenger = (function ($) {
             }
 
         } else {
-            $.animateTitle('clear');
+            if (app.options.is_title_count) {
+                $.animateTitle('clear');
+            }
         }
 
         if (app.options.is_favicon_count) {
@@ -381,46 +374,6 @@ icms.neomessenger = (function ($) {
         app.messagesCount = value;
 
     };
-
-    /* ------------------------------------------------------------------------- */
-
-    // this.setNoticesCounter = function (value) {
-    //
-    //     var $button = $('li.notices-counter');
-    //
-    //     if (!$button.length && value > 0) {
-    //         $button = $(app.templates.noticesButton()).insertAfter('li.messages-counter');
-    //         icms.modal.bind('li.notices-counter a');
-    //     }
-    //
-    //     $button.unbind('click.nm.notices');
-    //     $button.bind('click.nm.notices', function () {
-    //         $.animateTitle('clear');
-    //         $button.unbind('click.nm.notices');
-    //     });
-    //
-    //     $('.counter', $button).remove();
-    //
-    //     if (value > 0) {
-    //         var html = '<span class="counter">' + value + '</span>';
-    //         $('a', $button).append(html);
-    //
-    //         if (app.options.is_title_count) {
-    //             $.animateTitle('clear');
-    //             $.animateTitle(['*********************', LANG_NEOMESSENGER_YOU +' '+ value +' '+ spellcount(value, LANG_NEOMESSENGER_UN1, LANG_NEOMESSENGER_UN2, LANG_NEOMESSENGER_UN10)], 1000);
-    //         }
-    //
-    //         if (value > app.noticesCount) {
-    //             app.notificationsManager.playSound();
-    //         }
-    //
-    //     } else {
-    //         $.animateTitle('clear');
-    //     }
-    //
-    //     app.noticesCount = value;
-    //
-    // };
 
     /* ------------------------------------------------------------------------- */
 
@@ -539,6 +492,8 @@ icms.neomessenger = (function ($) {
                     return;
                 }
             });
+
+            icms.events.run('neomessenger_contact_selected', { id: id });
 
             app.messages.load(id);
 

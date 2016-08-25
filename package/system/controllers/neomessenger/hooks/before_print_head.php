@@ -47,8 +47,15 @@ class onNeomessengerBeforePrintHead extends cmsAction {
         $template->setContext($this);
 
         $template->addControllerCSS('styles');
-        $template->addControllerJS('libs/favico');
-        $template->addControllerJS('libs/animatetitle');
+
+        if (isset($this->options['is_favicon_count']) && $this->options['is_favicon_count']) {
+            $template->addControllerJS('libs/favico');
+        }
+
+        if (isset($this->options['is_title_count']) && $this->options['is_title_count']) {
+            $template->addControllerJS('libs/animatetitle');
+        }
+
         $template->addControllerJS('libs/jquery.waitforimages');
         $template->addControllerJS('libs/underscore');
         $template->addControllerJS('neomessenger');
