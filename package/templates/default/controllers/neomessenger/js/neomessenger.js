@@ -370,6 +370,11 @@ icms.neomessenger = (function ($) {
         if (app.options.is_favicon_count) {
             app.setFavicon(value);
         }
+        
+        //API для разработчиков
+		if (typeof(icms.neomessenger.MessagesCounterCallback) == 'function' && value > 0){
+            icms.neomessenger.MessagesCounterCallback(value);
+        }
 
         app.messagesCount = value;
 
