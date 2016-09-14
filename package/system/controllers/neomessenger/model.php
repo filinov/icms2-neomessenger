@@ -2,6 +2,50 @@
 
 class modelNeomessenger extends cmsModel {
 
+    /**
+     * Обработка сообщения взятого из базы
+     * @param $item
+     * @param $model
+     * @return mixed
+     */
+    public function prepareMessage($item, $model) {
+
+        $item['id'] = (int)$item['id'];
+        $item['to_id'] = (int)$item['to_id'];
+        $item['from_id'] = (int)$item['from_id'];
+
+        $item['user'] = array(
+            'id'       => $item['from_id'],
+            'nickname' => $item['user_nickname'],
+            'url'      => href_to('users', $item['from_id']),
+            'avatar'   => html_avatar_image_src($item['user_avatar'], 'micro')
+        );
+
+        $timestamp = strtotime($item['date_pub']);
+
+        if ($timestamp + 86400 < time()) {
+            $format = 'j F';
+            if (date('Y', $timestamp) !== date('Y')) {
+                $format .= ' Y';
+            }
+        } else {
+            $format = 'H:i';
+        }
+
+        $new_date = date($format, $timestamp);
+
+        $item['time'] = lang_date($new_date);
+
+        return $item;
+
+    }
+
+    /**
+     * Извлечение сообщений из базы от определенного контакта
+     * @param $user_id
+     * @param $contact_id
+     * @return array|bool
+     */
     public function getMessages($user_id, $contact_id) {
 
         $this->select('u.nickname', 'user_nickname');
@@ -26,42 +70,17 @@ class modelNeomessenger extends cmsModel {
 
         $this->orderBy('id', 'desc');
 
-        $messages = $this->get('{users}_messages', function($item, $model) {
-
-            $item['id'] = (int)$item['id'];
-            $item['to_id'] = (int)$item['to_id'];
-            $item['from_id'] = (int)$item['from_id'];
-
-            $item['user'] = array(
-                'id'       => $item['from_id'],
-                'nickname' => $item['user_nickname'],
-                'url'      => href_to('users', $item['from_id']),
-                'avatar'   => html_avatar_image_src($item['user_avatar'], 'micro')
-            );
-
-            $timestamp = strtotime($item['date_pub']);
-
-            if ($timestamp + 86400 < time()) {
-                $format = 'j F';
-                if (date('Y', $timestamp) !== date('Y')) {
-                    $format .= ' Y';
-                }
-            } else {
-                $format = 'H:i';
-            }
-
-            $new_date = date($format, $timestamp);
-
-            $item['time'] = lang_date($new_date);
-
-            return $item;
-
-        }, false);
+        $messages = $this->get('{users}_messages', array($this, 'prepareMessage'), false);
 
         return is_array($messages) ? array_reverse($messages) : false;
 
     }
 
+    /**
+     * Извлечение сообщений из базы от всех контактов
+     * @param $user_id
+     * @return array
+     */
     public function getMessagesFromAllContacts($user_id) {
 
         $this->select('u.nickname', 'user_nickname');
@@ -76,42 +95,17 @@ class modelNeomessenger extends cmsModel {
 
         $this->orderBy('id');
 
-        $messages = $this->get('{users}_messages', function($item, $model) {
-
-            $item['id'] = (int)$item['id'];
-            $item['to_id'] = (int)$item['to_id'];
-            $item['from_id'] = (int)$item['from_id'];
-
-            $item['user'] = array(
-                'id'       => $item['from_id'],
-                'nickname' => $item['user_nickname'],
-                'url'      => href_to('users', $item['from_id']),
-                'avatar'   => html_avatar_image_src($item['user_avatar'], 'micro')
-            );
-
-            $timestamp = strtotime($item['date_pub']);
-
-            if ($timestamp + 86400 < time()) {
-                $format = 'j F';
-                if (date('Y', $timestamp) !== date('Y')) {
-                    $format .= ' Y';
-                }
-            } else {
-                $format = 'H:i';
-            }
-
-            $new_date = date($format, $timestamp);
-
-            $item['time'] = lang_date($new_date);
-
-            return $item;
-
-        }, false);
+        $messages = $this->get('{users}_messages', array($this, 'prepareMessage'), false);
 
         return $messages;
 
     }
 
+    /**
+     * Получение списка контактов
+     * @param $user_id
+     * @return array
+     */
     public function getContacts($user_id) {
 
         $this->select('u.id', 'id');
@@ -145,6 +139,12 @@ class modelNeomessenger extends cmsModel {
 
     }
 
+    /**
+     * В игноре ли контакт
+     * @param $user_id
+     * @param $contact_id
+     * @return int
+     */
     public function isContactIgnored($user_id, $contact_id) {
 
         $this->filterEqual('user_id', $user_id);
@@ -159,6 +159,11 @@ class modelNeomessenger extends cmsModel {
 
     }
 
+    /**
+     * ID последнего сообщения
+     * @param $user_id
+     * @return int
+     */
     public function getLastMessageID($user_id) {
 
         $this->filterEqual('to_id', $user_id);
