@@ -4,17 +4,15 @@ class actionNeomessengerGetMessagesCount extends cmsAction {
 
     public function run() {
 
-        $user = cmsUser::getInstance();
-        $template = cmsTemplate::getInstance();
         $messenger = cmsCore::getController('messages');
 
-        $messagesCount = $messenger->model->getNewMessagesCount($user->id);
+        $messagesCount = $messenger->model->getNewMessagesCount($this->cms_user->id);
 
         $messenger->model->resetFilters();
 
-        $noticesCount = $messenger->model->getNoticesCount($user->id);
+        $noticesCount = $messenger->model->getNoticesCount($this->cms_user->id);
 
-        $template->renderJSON(array(
+        $this->cms_template->renderJSON(array(
             'error' => false,
             'messagesCount' => $messagesCount,
             'noticesCount' => $noticesCount
