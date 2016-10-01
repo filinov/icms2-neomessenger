@@ -43,6 +43,7 @@ icms.neomessenger = (function ($) {
         this.abortRefresh     = false;
 
         this.bindEvents();
+        this.widgetBtn.append();
         this.setRefresh(true);
 
     };
@@ -65,6 +66,37 @@ icms.neomessenger = (function ($) {
 
     this.initFavicon = function () {
         return app.options.is_favicon_count ? new Favico({ animation:'popFade' }) : false;
+    };
+
+    /* ------------------------------------------------------------------------- */
+
+    this.widgetBtn = {
+
+        append: function () {
+            $('body').append(app.templates.widgetButton());
+            $('#nm-widget-btn').on('click', function (e) {
+                app.open();
+            });
+        },
+
+        show: function () {
+            $('#nm-widget-btn').removeClass('nm-widget-btn-hidden');
+        },
+
+        hide: function() {
+            $('#nm-widget-btn').addClass('nm-widget-btn-hidden');
+        },
+
+        setValue: function (value) {
+            if (value) {
+                $('#nm-widget-btn').addClass('nm-animate');
+            } else {
+                $('#nm-widget-btn').removeClass('nm-animate');
+            }
+            var $counter = $('#nm-widget-btn').find('.nm-widget-btn-counter');
+            $counter.text('+' + value);
+        }
+
     };
 
     /* ------------------------------------------------------------------------- */
@@ -375,6 +407,8 @@ icms.neomessenger = (function ($) {
 		if (typeof(icms.neomessenger.MessagesCounterCallback) == 'function' && value > 0){
             icms.neomessenger.MessagesCounterCallback(value);
         }
+
+        app.widgetBtn.setValue(value);
 
         app.messagesCount = value;
 
@@ -1132,6 +1166,8 @@ icms.neomessenger = (function ($) {
             this.$el.fadeIn();
             this.$bg.trigger('nm_opened');
 
+            app.widgetBtn.hide();
+
             this.visible = true;
 
         },
@@ -1161,6 +1197,9 @@ icms.neomessenger = (function ($) {
                 if ($metaTagTheme.length) {
                     $metaTagTheme.attr('content', self.metaTheme);
                 }
+
+                app.widgetBtn.show();
+
             });
 
             this.visible = false;

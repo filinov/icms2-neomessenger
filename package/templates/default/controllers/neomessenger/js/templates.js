@@ -173,3 +173,17 @@ __p += '<li class="info notices-counter">\r\n    <a class="item" href="/messages
 }
 return __p
 }})();
+(function() {
+window["icms"] = window["icms"] || {};
+window["icms"]["neomessenger"] = window["icms"]["neomessenger"] || {};
+window["icms"]["neomessenger"]["templates"] = window["icms"]["neomessenger"]["templates"] || {};
+
+window["icms"]["neomessenger"]["templates"]["widgetButton"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '';
+with (obj) {
+__p += '<div id="nm-widget-btn" class="nm-widget-btn">\r\n    <div class="nm-widget-btn-icon"></div>\r\n    <div class="nm-widget-btn-counter"></div>\r\n</div>';
+
+}
+return __p
+}})();
