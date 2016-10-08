@@ -24,6 +24,13 @@ class formNeomessengerOptions extends cmsForm {
                         )
                     )),
 
+                    new fieldNumber('time_delete_old', array(
+                        'title'   => LANG_NEOMESSENGER_TIME_DELETE_OLD,
+                        'hint'    => LANG_NEOMESSENGER_TIME_DELETE_OLD_HINT,
+                        'default' => 0,
+                        'units'   => LANG_DAY10
+                    )),
+
                     new fieldList('send_enter', array(
                         'title' => LANG_NEOMESSENGER_CP_SEND_TYPE,
                         'default' => 1,
@@ -40,6 +47,11 @@ class formNeomessengerOptions extends cmsForm {
                             1 => LANG_YES,
                             0 => LANG_NO
                         )
+                    )),
+
+                    new fieldCheckbox('show_widget_button', array(
+                        'title' => LANG_NEOMESSENGER_CP_SHOW_WIDGET_BUTTON,
+                        'default' => 1
                     )),
 
                     new fieldList('html_editor', array(

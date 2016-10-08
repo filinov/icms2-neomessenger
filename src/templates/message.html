@@ -3,7 +3,7 @@
     var className = 'conversation-item clearfix';
 
     if (is_my) {
-        className += ' item-right';
+        className += ' item-right is_can_select';
     } else {
         className += ' item-left';
     }
@@ -17,6 +17,8 @@
 %>
 
 <div id="nm-message-<%= msg.id %>" class="<%= className %>" rel="<%= msg.id %>">
+
+    <div class="nm-message-check"></div>
 
     <div class="conversation-user">
         <img src="<%= msg.user.avatar %>" class="nm-message-user-photo">

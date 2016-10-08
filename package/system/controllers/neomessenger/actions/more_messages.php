@@ -19,18 +19,23 @@ class actionNeomessengerMoreMessages extends cmsAction {
 
         $messages = $this->model
             ->filterLt('id', $message_id)
-            ->limit($this->options['messages_limit'])
+            ->limit($this->options['messages_limit'] + 1)
             ->getMessages($user->id, $contact_id);
 
-        $first_message_id = count($messages) ? $messages[0]['id'] : 0;
+        if (count($messages) > $this->options['messages_limit']) {
+            $has_older = true;
+            array_shift($messages);
+        } else {
+            $has_older = false;
+        }
 
-        $has_older = $messenger->model
-            ->hasOlderMessages($user->id, $contact_id, $first_message_id);
+        if (is_array($messages)) {
+            $messages = array_reverse($messages);
+        }
 
         $template->renderJSON(array(
-            'messages' => $messages ? array_values(array_reverse($messages)) : false,
-            'has_older' => $has_older,
-            'older_id' => $first_message_id
+            'messages' => $messages,
+            'has_older' => $has_older
         ));
 
     }

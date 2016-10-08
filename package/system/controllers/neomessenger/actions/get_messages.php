@@ -6,7 +6,6 @@ class actionNeomessengerGetMessages extends cmsAction {
 
         $user = cmsUser::getInstance();
         $template = cmsTemplate::getInstance();
-        $messenger = cmsCore::getController('messages');
 
         $contact_id = $this->request->get('contact_id');
 
@@ -17,16 +16,20 @@ class actionNeomessengerGetMessages extends cmsAction {
             $template->renderJSON(array('error' => true));
         }
 
-        $messages = $this->model->limit($this->options['messages_limit'])->getMessages($user->id, $contact_id);
+        $messages = $this->model
+            ->limit($this->options['messages_limit'] + 1)
+            ->getMessages($user->id, $contact_id);
 
-        $older_id = count($messages) ? $messages[0]['id'] : 0;
-
-        $has_older = $messenger->model->hasOlderMessages($user->id, $contact_id, $older_id);
+        if (count($messages) > $this->options['messages_limit']) {
+            $has_older = true;
+            array_shift($messages);
+        } else {
+            $has_older = false;
+        }
 
         $template->renderJSON(array(
-            'messages' => $messages ? array_values($messages) : false,
+            'messages' => $messages,
             'has_older' => $has_older,
-            'older_id' => $older_id,
             'csrf_token' => cmsForm::getCSRFToken()
         ));
 

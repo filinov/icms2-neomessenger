@@ -73,6 +73,7 @@ icms.neomessenger = (function ($) {
     this.widgetBtn = {
 
         append: function () {
+            if (!app.options.show_widget_button) { return; }
             $('body').append(app.templates.widgetButton());
             $('#nm-widget-btn').on('click', function (e) {
                 app.open();
@@ -80,14 +81,17 @@ icms.neomessenger = (function ($) {
         },
 
         show: function () {
+            if (!app.options.show_widget_button) { return; }
             $('#nm-widget-btn').removeClass('nm-widget-btn-hidden');
         },
 
         hide: function() {
+            if (!app.options.show_widget_button) { return; }
             $('#nm-widget-btn').addClass('nm-widget-btn-hidden');
         },
 
         setValue: function (value) {
+            if (!app.options.show_widget_button) { return; }
             if (value) {
                 $('#nm-widget-btn').addClass('nm-animate');
             } else {
@@ -190,6 +194,15 @@ icms.neomessenger = (function ($) {
             // Отмечать сообщение как прочитанное при наведении на него курсора
             $(this).on('mouseenter click', '.conversation-item.new', function() {
                 app.messages.setReaded();
+            });
+
+            // Отмечать сообщение как прочитанное при наведении на него курсора
+            $(this).on('click', '.conversation-item.is_can_select', function(e) {
+                var $target = $(e.target);
+                if (!$target.is('a')) {
+                    $(this).toggleClass('nm-selected');
+                    app.messages.checkSelected();
+                }
             });
 
             // Удаление контакта
@@ -765,6 +778,7 @@ icms.neomessenger = (function ($) {
         lastId: 0,
         firstId: false,
         csrf_token: null,
+        selected: [],
 
         load: function(id) {
 
@@ -782,6 +796,7 @@ icms.neomessenger = (function ($) {
             this.older_id = false;
             this._sendLock = false;
             this.oldLoading = false;
+            this.selected = [];
 
             app.isRefreshEnabled = false;
             app.contacts.lock();
@@ -798,6 +813,7 @@ icms.neomessenger = (function ($) {
                     $('#nm-chat-wrapper').show();
 
                     if (messages) {
+                        self.older_id = messages[0].id;
                         $.each(messages, function () {
                             self.add(this);
                             if (this.id > self.lastId) {
@@ -806,7 +822,6 @@ icms.neomessenger = (function ($) {
                         });
 
                         if (result.has_older) {
-                            self.older_id = result.older_id;
                             $('#nm-chat').bind('scroll', function () {
                                 if ($(this).scrollTop() <= 5) self.oldLoad();
                             });
@@ -856,7 +871,9 @@ icms.neomessenger = (function ($) {
             }
 
             if (icms.events.listeners['neomessenger_message_add']) {
-                icms.events.run('neomessenger_message_add', { msg: message, fnc: addMessage });
+                icms.events.run('neomessenger_message_add', {
+                    msg: message, callback: addMessage
+                });
             } else {
                 addMessage(message);
             }
@@ -885,9 +902,11 @@ icms.neomessenger = (function ($) {
                 if (!result.error) {
 
                     var oldFirstId = self.older_id;
-                    self.older_id = result.older_id;
 
                     if (result.messages) {
+
+                        self.older_id = result.messages[result.messages.length - 1].id;
+
                         $.each(result.messages, function() {
                             self.add(this, true);
                         });
@@ -895,7 +914,8 @@ icms.neomessenger = (function ($) {
                         $chat.waitForImages({
                             finished: function() {
                                 var pos = $chat.find('#nm-message-' + oldFirstId).position();
-                                $chat.scrollTop($chat.scrollTop() + pos.top);
+                                var panelH = $('#nm-contact-panel').outerHeight();
+                                $chat.scrollTop($chat.scrollTop() + pos.top - panelH);
                             },
                             waitForAll: true
                         });
@@ -1070,6 +1090,95 @@ icms.neomessenger = (function ($) {
             if (app.isRefreshing) {
                 app.abortRefresh = true;
             }
+
+        },
+
+        checkSelected: function () {
+
+            var $chat = $('#nm-chat'),
+                $selectedMsg = $chat.find('.conversation-item.nm-selected'),
+                selectedMsgLength = $selectedMsg.length;
+
+            app.messages.selected = [];
+
+            if (selectedMsgLength) {
+                $('#nm-contact-panel').html(app.templates.messagesPanel({ count: selectedMsgLength }));
+                $selectedMsg.each(function() {
+                    app.messages.selected.push($(this).attr('rel'));
+                });
+            } else {
+                $('#nm-contact-panel').html(app.templates.contactPanel({ contact: app.contacts.current }));
+            }
+
+        },
+
+        cancelSelected() {
+
+            var $chat = $('#nm-chat'),
+                $selectedMsg = $chat.find('.conversation-item.nm-selected');
+
+            if ($selectedMsg.length) {
+                $selectedMsg.each(function() {
+                    $(this).removeClass('nm-selected');
+                });
+            }
+
+            app.messages.checkSelected();
+
+            return false;
+
+        },
+
+        deleteMessages: function () {
+
+            var selected = app.messages.selected,
+                $chat = $('#nm-chat');
+
+            if (selected.length) {
+                app.post('delete_message', {message_ids: selected}, function (result) {
+
+                    app.messages.selected = [];
+
+                    if (result.error) { return; }
+
+                    var replace_func = function (id, delete_text) {
+                        var $message = $('#nm-message-' + id, $chat);
+
+                        $message
+                            .removeClass('is_can_select nm-selected')
+                            .find('.nm-message-text').hide()
+                            .after('<span class="nm-message-delete-text">' + delete_text + '</span>');
+                    };
+
+                    if (result.message_ids) {
+                        for (var key in result.message_ids) {
+                            replace_func(result.message_ids[key], result.delete_text);
+                        }
+                    }
+
+                    app.messages.checkSelected();
+
+                });
+            }
+
+            return false;
+
+        },
+
+        restoreMessages(linkObj) {
+
+            var $chat = $('#nm-chat'),
+                $message = $(linkObj).closest('.conversation-item'),
+                msg_id = $message.attr('rel');
+
+            app.post('restore_message', { message_id: msg_id }, function (result) {
+
+                if (result.error) { return; }
+
+                $message.addClass('is_can_select').find('.nm-message-text').show();
+                $message.find('.nm-message-delete-text').remove();
+
+            });
 
         },
 

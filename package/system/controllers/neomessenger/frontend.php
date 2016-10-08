@@ -33,12 +33,13 @@ class neomessenger extends cmsFrontend {
     public function getNmOptions() {
 
         return array(
-            'refreshInterval'  => $this->options['refresh_interval'],
-            'send_enter'       => (bool)$this->options['send_enter'],
-            'close_backdrop'   => (bool)$this->options['close_backdrop'],
-            'is_title_count'   => (bool)$this->options['is_title_count'],
-            'is_favicon_count' => (bool)$this->options['is_favicon_count'],
-            'root_url'         => cmsConfig::get('root')
+            'refreshInterval'    => $this->options['refresh_interval'],
+            'send_enter'         => (bool)$this->options['send_enter'],
+            'close_backdrop'     => (bool)$this->options['close_backdrop'],
+            'show_widget_button' => (bool)$this->options['show_widget_button'],
+            'is_title_count'     => (bool)$this->options['is_title_count'],
+            'is_favicon_count'   => (bool)$this->options['is_favicon_count'],
+            'root_url'           => cmsConfig::get('root')
         );
 
     }

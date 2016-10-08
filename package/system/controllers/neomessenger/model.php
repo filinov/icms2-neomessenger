@@ -8,37 +8,37 @@ class modelNeomessenger extends cmsModel {
      * @param $model
      * @return mixed
      */
-    public function prepareMessage($item, $model) {
-
-        $item['id'] = (int)$item['id'];
-        $item['to_id'] = (int)$item['to_id'];
-        $item['from_id'] = (int)$item['from_id'];
-
-        $item['user'] = array(
-            'id'       => $item['from_id'],
-            'nickname' => $item['user_nickname'],
-            'url'      => href_to('users', $item['from_id']),
-            'avatar'   => html_avatar_image_src($item['user_avatar'], 'micro')
-        );
-
-        $timestamp = strtotime($item['date_pub']);
-
-        if ($timestamp + 86400 < time()) {
-            $format = 'j F';
-            if (date('Y', $timestamp) !== date('Y')) {
-                $format .= ' Y';
-            }
-        } else {
-            $format = 'H:i';
-        }
-
-        $new_date = date($format, $timestamp);
-
-        $item['time'] = lang_date($new_date);
-
-        return $item;
-
-    }
+//    public function prepareMessage($item, $model) {
+//
+//        $item['id'] = (int)$item['id'];
+//        $item['to_id'] = (int)$item['to_id'];
+//        $item['from_id'] = (int)$item['from_id'];
+//
+//        $item['user'] = array(
+//            'id'       => $item['from_id'],
+//            'nickname' => $item['user_nickname'],
+//            'url'      => href_to('users', $item['from_id']),
+//            'avatar'   => html_avatar_image_src($item['user_avatar'], 'micro')
+//        );
+//
+//        $timestamp = strtotime($item['date_pub']);
+//
+//        if ($timestamp + 86400 < time()) {
+//            $format = 'j F';
+//            if (date('Y', $timestamp) !== date('Y')) {
+//                $format .= ' Y';
+//            }
+//        } else {
+//            $format = 'H:i';
+//        }
+//
+//        $new_date = date($format, $timestamp);
+//
+//        $item['time'] = lang_date($new_date);
+//
+//        return $item;
+//
+//    }
 
     /**
      * Извлечение сообщений из базы от определенного контакта
@@ -54,23 +54,43 @@ class modelNeomessenger extends cmsModel {
 
         if ($this->filter_on) { $this->filterAnd(); }
 
-        $this->filterStart();
-        $this->filterStart();
-        $this->filterEqual('from_id', $user_id);
-        $this->filterEqual('to_id', $contact_id);
-        $this->filterEnd();
-
-        $this->filterOr();
-
-        $this->filterStart();
-        $this->filterEqual('from_id', $contact_id);
-        $this->filterEqual('to_id', $user_id);
-        $this->filterEnd();
-        $this->filterEnd();
+        $this->filterIn('from_id', array($user_id, $contact_id));
+        $this->filterIn('to_id', array($user_id, $contact_id));
+        $this->filterIsNull('is_deleted');
 
         $this->orderBy('id', 'desc');
 
-        $messages = $this->get('{users}_messages', array($this, 'prepareMessage'), false);
+        $messages = $this->get('{users}_messages', function($item, $model) {
+
+            $item['id'] = (int)$item['id'];
+            $item['to_id'] = (int)$item['to_id'];
+            $item['from_id'] = (int)$item['from_id'];
+
+            $item['user'] = array(
+                'id'       => $item['from_id'],
+                'nickname' => $item['user_nickname'],
+                'url'      => href_to('users', $item['from_id']),
+                'avatar'   => html_avatar_image_src($item['user_avatar'], 'micro')
+            );
+
+            $timestamp = strtotime($item['date_pub']);
+
+            if ($timestamp + 86400 < time()) {
+                $format = 'j F';
+                if (date('Y', $timestamp) !== date('Y')) {
+                    $format .= ' Y';
+                }
+            } else {
+                $format = 'H:i';
+            }
+
+            $new_date = date($format, $timestamp);
+
+            $item['time'] = lang_date($new_date);
+
+            return $item;
+
+        }, false);
 
         return is_array($messages) ? array_reverse($messages) : false;
 
@@ -91,11 +111,42 @@ class modelNeomessenger extends cmsModel {
 
         $this->filterStart();
         $this->filterEqual('to_id', $user_id);
+        $this->filterIsNull('is_deleted');
         $this->filterEnd();
 
         $this->orderBy('id');
 
-        $messages = $this->get('{users}_messages', array($this, 'prepareMessage'), false);
+        $messages = $this->get('{users}_messages', function($item, $model) {
+
+            $item['id'] = (int)$item['id'];
+            $item['to_id'] = (int)$item['to_id'];
+            $item['from_id'] = (int)$item['from_id'];
+
+            $item['user'] = array(
+                'id'       => $item['from_id'],
+                'nickname' => $item['user_nickname'],
+                'url'      => href_to('users', $item['from_id']),
+                'avatar'   => html_avatar_image_src($item['user_avatar'], 'micro')
+            );
+
+            $timestamp = strtotime($item['date_pub']);
+
+            if ($timestamp + 86400 < time()) {
+                $format = 'j F';
+                if (date('Y', $timestamp) !== date('Y')) {
+                    $format .= ' Y';
+                }
+            } else {
+                $format = 'H:i';
+            }
+
+            $new_date = date($format, $timestamp);
+
+            $item['time'] = lang_date($new_date);
+
+            return $item;
+
+        }, false);
 
         return $messages;
 
@@ -135,7 +186,7 @@ class modelNeomessenger extends cmsModel {
 
             return $item;
 
-        });
+        }, false);
 
     }
 
@@ -167,9 +218,75 @@ class modelNeomessenger extends cmsModel {
     public function getLastMessageID($user_id) {
 
         $this->filterEqual('to_id', $user_id);
+        $this->filterIsNull('is_deleted');
+
         $this->orderBy('id', 'desc');
 
         return (int)$this->getFieldFiltered('{users}_messages', 'id');
+
+    }
+
+    /**
+     * Количество новых сообщений
+     * @param $user_id
+     * @return int
+     */
+    public function getNewMessagesCount($user_id) {
+
+        $this->filterEqual('to_id', $user_id);
+        $this->filterEqual('is_new', 1);
+        $this->filterIsNull('is_deleted');
+
+        $count = $this->getCount('{users}_messages');
+
+        return $count;
+
+    }
+
+    /**
+     * Удаление сообщений
+     * @param $user_id
+     * @param $ids
+     * @return mixed
+     */
+    public function deleteMessages($user_id, $ids) {
+
+        $this->filterEqual('from_id', $user_id);
+        $this->filterIn('id', $ids);
+
+        return $this->updateFiltered('{users}_messages', array(
+            'is_deleted'  => 1,
+            'date_delete' => NULL
+        ));
+
+    }
+
+    /**
+     * Восстановление удаленных сообщений
+     * @param $user_id
+     * @param $id
+     * @return mixed
+     */
+    public function restoreMessages($user_id, $id) {
+
+        $this->filterEqual('from_id', $user_id);
+        $this->filterEqual('id', $id);
+
+        return $this->updateFiltered('{users}_messages', array(
+            'is_deleted'  => null,
+            'date_delete' => false
+        ));
+
+    }
+
+
+    public function deleteController($id) {
+
+        parent::deleteController($id);
+
+        $this->filterEqual('controller', 'neomessenger')->deleteFiltered('scheduler_tasks');
+
+        return true;
 
     }
 

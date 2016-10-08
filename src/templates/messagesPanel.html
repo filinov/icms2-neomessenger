@@ -1,0 +1,18 @@
+<%
+    var str = LANG_NEOMESSENGER_CP_MESSAGES_SPELLCOUNT;
+    strArr = str.split('|');
+    var title = count + ' ' + spellcount(count, strArr[0], strArr[1], strArr[2]);
+%>
+
+<div class="nm-messages-panel">
+
+    <div class="nm-messages-panel-title"><%= title %></div>
+
+</div>
+
+<div class="nm-cp-actions">
+    <input type="button" class="nm-button nm-button-small" value="<%= LANG_DELETE %>" onclick="icms.neomessenger.messages.deleteMessages()">
+    <input type="button" class="nm-button nm-button-small" value="<%= LANG_CANCEL %>" onclick="icms.neomessenger.messages.cancelSelected()">
+</div>
+
+<div class="clearfix"></div>

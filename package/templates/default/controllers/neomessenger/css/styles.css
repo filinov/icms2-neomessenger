@@ -360,6 +360,9 @@ li.selected .nm-online-status {
   position: absolute;
   left: 40px;
   top: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #nm-contact-panel .nm-cp-actions {
@@ -381,6 +384,16 @@ li.selected .nm-online-status {
 /* Messages
 ------------------------------------------------------------------------------ */
 
+.nm-messages-panel {
+  float: left;
+  line-height: 34px;
+}
+
+.nm-messages-panel-title {
+  float: left;
+  color: #6490b1;
+}
+
 .conversation-inner {
   padding: 5px 0;
   overflow: hidden;
@@ -394,8 +407,38 @@ li.selected .nm-online-status {
   transition: background 1s linear;
 }
 
-.conversation-item.new {
+.conversation-item.is_can_select {
+  transition: none;
+}
+
+.nm-message-check {
+  width: 16px;
+  height: 16px;
+  display: none;
+  top: 14px;
+  left: 8px;
+  position: absolute;
+  background: url(../images/msg_select.png) no-repeat;
+  opacity: .6;
+}
+
+.conversation-item.new,
+.conversation-item.nm-selected,
+.conversation-item.is_can_select:hover {
   background-color: #e6ecf2;
+}
+
+.conversation-item.is_can_select:hover .nm-message-check,
+.conversation-item.nm-selected .nm-message-check {
+  display: block;
+}
+
+.conversation-item.nm-selected .nm-message-check {
+  opacity: 1;
+}
+
+.conversation-item.is_can_select {
+  cursor: pointer;
 }
 
 .conversation-user {
@@ -478,7 +521,8 @@ li.selected .nm-online-status {
   display: none;
 }
 
-.nm-message-text {
+.nm-message-text,
+.nm-message-delete-text {
   font-size: 12px;
 }
 
@@ -797,6 +841,12 @@ html.nm-mobile body {
   50%, 95% { opacity: 1; -webkit-filter: none; filter: none; -webkit-transform: rotateY(0); transform: rotateY(0) }
   97.5% { -webkit-transform: rotateY(90deg); transform: rotateY(90deg) }
   97.5%, to { opacity: 0; filter: alpha(opacity=0) }
+}
+
+@media (max-width: 620px) {
+  .nm-contact-nickname {
+    max-width: 160px;
+  }
 }
 
 @media (max-width: 520px) {

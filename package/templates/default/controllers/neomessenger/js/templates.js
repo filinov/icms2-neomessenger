@@ -120,7 +120,7 @@ with (obj) {
     var className = 'conversation-item clearfix';
 
     if (is_my) {
-        className += ' item-right';
+        className += ' item-right is_can_select';
     } else {
         className += ' item-left';
     }
@@ -138,7 +138,7 @@ __p += '\r\n\r\n<div id="nm-message-' +
 ((__t = ( className )) == null ? '' : __t) +
 '" rel="' +
 ((__t = ( msg.id )) == null ? '' : __t) +
-'">\r\n\r\n    <div class="conversation-user">\r\n        <img src="' +
+'">\r\n\r\n    <div class="nm-message-check"></div>\r\n\r\n    <div class="conversation-user">\r\n        <img src="' +
 ((__t = ( msg.user.avatar )) == null ? '' : __t) +
 '" class="nm-message-user-photo">\r\n    </div>\r\n\r\n    <div class="conversation-body">\r\n\r\n        ';
  if (!temp) { ;
@@ -155,6 +155,33 @@ __p += '\r\n                <div class="nm-message-time"><span>' +
 __p += '\r\n            <span class="nm-message-text">' +
 ((__t = ( msg.content )) == null ? '' : __t) +
 '</span>\r\n        </div>\r\n\r\n    </div>\r\n\r\n</div>';
+
+}
+return __p
+}})();
+(function() {
+window["icms"] = window["icms"] || {};
+window["icms"]["neomessenger"] = window["icms"]["neomessenger"] || {};
+window["icms"]["neomessenger"]["templates"] = window["icms"]["neomessenger"]["templates"] || {};
+
+window["icms"]["neomessenger"]["templates"]["messagesPanel"] = function(obj) {
+obj || (obj = {});
+var __t, __p = '', __j = Array.prototype.join;
+function print() { __p += __j.call(arguments, '') }
+with (obj) {
+
+
+    var str = LANG_NEOMESSENGER_CP_MESSAGES_SPELLCOUNT;
+    strArr = str.split('|');
+    var title = count + ' ' + spellcount(count, strArr[0], strArr[1], strArr[2]);
+;
+__p += '\r\n\r\n<div class="nm-messages-panel">\r\n\r\n    <div class="nm-messages-panel-title">' +
+((__t = ( title )) == null ? '' : __t) +
+'</div>\r\n\r\n</div>\r\n\r\n<div class="nm-cp-actions">\r\n    <input type="button" class="nm-button nm-button-small" value="' +
+((__t = ( LANG_DELETE )) == null ? '' : __t) +
+'" onclick="icms.neomessenger.messages.deleteMessages()">\r\n    <input type="button" class="nm-button nm-button-small" value="' +
+((__t = ( LANG_CANCEL )) == null ? '' : __t) +
+'" onclick="icms.neomessenger.messages.cancelSelected()">\r\n</div>\r\n\r\n<div class="clearfix"></div>';
 
 }
 return __p

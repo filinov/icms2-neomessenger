@@ -60,7 +60,7 @@ class actionNeomessengerGetContacts extends cmsAction {
 
         $template->renderJSON(array(
             'error' => false,
-            'contacts' => $contacts ? array_values($contacts) : false,
+            'contacts' => $contacts,
             'message_last_id' => $message_last_id
         ));
 

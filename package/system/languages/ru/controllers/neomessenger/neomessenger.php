@@ -23,6 +23,9 @@
     define('LANG_NEOMESSENGER_UN2',                              'непрочитанных уведомления');
     define('LANG_NEOMESSENGER_UN10',                             'непрочитанных уведомлений');
 
+    define('LANG_NEOMESSENGER_IS_DELETE',                        'Сообщение удалено.');
+    define('LANG_NEOMESSENGER_DO_RESTORE',                       ' <a href="#" onclick="return icms.neomessenger.messages.restoreMessages(this);">Восстановить</a>');
+
 
     // Админка
     define('LANG_NEOMESSENGER_CP_UPDATE_INTERVAL',               'Интервал обновления чата');
@@ -34,10 +37,14 @@
     define('LANG_NEOMESSENGER_CP_LIMITS',                        'Лимиты');
     define('LANG_NEOMESSENGER_CP_MESSAGES_LIMIT',                'Выводить сообщений за раз');
 
+    define('LANG_NEOMESSENGER_TIME_DELETE_OLD',                  'Сколько хранить удалённые сообщения?');
+    define('LANG_NEOMESSENGER_TIME_DELETE_OLD_HINT',             '0 - хранить всегда');
+
     define('LANG_NEOMESSENGER_CP_MAIN_TITLE',                    'Заголовок окна мессенджера');
 
     define('LANG_NEOMESSENGER_CP_SEND_TYPE',                     'Сочетание клавиш для отправка сообщений');
     define('LANG_NEOMESSENGER_CP_BACKDROP_CLOSE',                'Закрывать окно при клике на задний фон');
+    define('LANG_NEOMESSENGER_CP_SHOW_WIDGET_BUTTON',            'Показывать плавающую кнопку');
 
     define('LANG_NEOMESSENGER_CP_COUNTERS',                      'Счетчики сообщений');
     define('LANG_NEOMESSENGER_CP_TITLE_COUNT',                   'Мигать в заголовке браузера количеством сообщений');

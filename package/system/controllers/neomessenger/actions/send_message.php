@@ -66,7 +66,7 @@ class actionNeomessengerSendMessage extends cmsAction {
 
         $template->renderJSON(array(
             'error' => false,
-            'messages' => $messages ? array_values($messages) : false
+            'messages' => $messages
         ));
 
     }
