@@ -89,11 +89,16 @@ window["icms"]["neomessenger"]["templates"] = window["icms"]["neomessenger"]["te
 
 window["icms"]["neomessenger"]["templates"]["mainModal"] = function(obj) {
 obj || (obj = {});
-var __t, __p = '';
+var __t, __p = '', __j = Array.prototype.join;
+function print() { __p += __j.call(arguments, '') }
 with (obj) {
-__p += '<div id="nm-overlay">\r\n    <div id="nm-dialog">\r\n\r\n        <div class="nm-header">\r\n            <div class="nm-toggle nm-icon-hamburger-wrap">\r\n                <span class="nm-icon-bar"></span>\r\n                <span class="nm-icon-bar"></span>\r\n                <span class="nm-icon-bar"></span>\r\n            </div>\r\n            <div class="nm-title">' +
+__p += '<div id="nm-overlay">\r\n    <div id="nm-dialog">\r\n\r\n        <div class="nm-header">\r\n            <div class="nm-toggle"></div>\r\n            <div class="nm-title">' +
 ((__t = ( LANG_NEOMESSENGER_MAIN_TITLE )) == null ? '' : __t) +
-'</div>\r\n            <div class="nm-close"></div>\r\n        </div>\r\n\r\n        <div class="nm-body">\r\n            <div class="nm-loading"></div>\r\n            <div class="nm-nomess">' +
+'</div>\r\n            <div class="nm-mute';
+ if (soundEnabled) { ;
+__p += ' nm-active';
+ } ;
+__p += '"></div>\r\n            <div class="nm-close"></div>\r\n        </div>\r\n\r\n        <div class="nm-body">\r\n            <div class="nm-loading"></div>\r\n            <div class="nm-nomess">' +
 ((__t = ( LANG_NEOMESSENGER_NO_MESS )) == null ? '' : __t) +
 '</div>\r\n            <div class="nm-content">\r\n\r\n                <div class="nm-left">\r\n\r\n                    <div class="nm-search-c-wrap">\r\n                        <div class="nm-inp-c-bl">\r\n                            <div class="nm-search-icon"></div>\r\n                            <input type="text" id="nm-search-inp" value="" placeholder="' +
 ((__t = ( LANG_NEOMESSENGER_SEARCH_PLACEHOLDER )) == null ? '' : __t) +
@@ -182,20 +187,6 @@ __p += '\r\n\r\n<div class="nm-messages-panel">\r\n\r\n    <div class="nm-messag
 '" onclick="icms.neomessenger.messages.deleteMessages()">\r\n    <input type="button" class="nm-button nm-button-small" value="' +
 ((__t = ( LANG_CANCEL )) == null ? '' : __t) +
 '" onclick="icms.neomessenger.messages.cancelSelected()">\r\n</div>\r\n\r\n<div class="clearfix"></div>';
-
-}
-return __p
-}})();
-(function() {
-window["icms"] = window["icms"] || {};
-window["icms"]["neomessenger"] = window["icms"]["neomessenger"] || {};
-window["icms"]["neomessenger"]["templates"] = window["icms"]["neomessenger"]["templates"] || {};
-
-window["icms"]["neomessenger"]["templates"]["noticesButton"] = function(obj) {
-obj || (obj = {});
-var __t, __p = '';
-with (obj) {
-__p += '<li class="info notices-counter">\r\n    <a class="item" href="/messages/notices">\r\n        <span class="wrap">Уведомления</span>\r\n    </a>\r\n</li>';
 
 }
 return __p

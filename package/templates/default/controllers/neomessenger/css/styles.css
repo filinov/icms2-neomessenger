@@ -82,13 +82,41 @@ html.nm-opened body {
   width: 38px;
   height: 38px;
   cursor: pointer;
-  background: url("../images/close.png") no-repeat center;
+  background: url("../images/ic_close_white_24dp_1x.png") no-repeat center;
   right: 0;
 }
 
+.nm-mute {
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  cursor: pointer;
+  background: url("../images/ic_volume_off_white_24dp_1x.png") no-repeat center;
+  right: 38px;
+}
+
+.nm-mute.nm-active {
+  background: url("../images/ic_volume_up_white_24dp_1x.png") no-repeat center;
+}
+
+.nm-close:hover,
+.nm-mute:hover {
+  background-color: rgba(0, 0, 0, .05);
+}
+
 .nm-retina .nm-close {
-    background: url("../images/close_2x.png") no-repeat center;
-    background-size: 11px 11px;
+    background: url("../images/ic_close_white_24dp_2x.png") no-repeat center;
+    background-size: 24px;
+}
+
+.nm-retina .nm-mute {
+  background: url("../images/ic_volume_off_white_24dp_2x.png") no-repeat center;
+  background-size: 24px;
+}
+
+.nm-retina .nm-mute.nm-active {
+  background: url("../images/ic_volume_up_white_24dp_2x.png") no-repeat center;
+  background-size: 24px;
 }
 
 .nm-toggle {
@@ -97,34 +125,28 @@ html.nm-opened body {
   height: 38px;
   cursor: pointer;
   left: 0;
+  background: url("../images/ic_menu_white_24dp_1x.png") no-repeat center;
   display: none;
 }
 
-.nm-icon-hamburger-wrap {
-    padding: 9px;
-    vertical-align: top;
-}
-
-.nm-icon-hamburger-wrap .nm-icon-bar {
-    background: #fff;
-    display: block;
-    height: 3px;
-    margin: 3px 0;
+.nm-retina .nm-toggle {
+  background: url("../images/ic_menu_white_24dp_2x.png") no-repeat center;
+  background-size: 24px;
 }
 
 .nm-title {
-  background: url("../images/message.png") center left no-repeat;
+  background: url("../images/ic_chat_white_24dp_1x.png") center left no-repeat;
   text-overflow: ellipsis;
   position: absolute;
-  padding: 0 20px;
+  padding-left: 28px;
   color: #fff;
   left: 15px;
-  right: 38px;
+  right: 76px;
 }
 
 .nm-retina .nm-title {
-  background: url("../images/message_2x.png") center left no-repeat;
-  background-size: 16px;
+  background: url("../images/ic_chat_white_24dp_2x.png") center left no-repeat;
+  background-size: 24px;
 }
 
 .nm-body {
@@ -852,9 +874,7 @@ html.nm-mobile body {
 @media (max-width: 520px) {
   .nm-title,
   .nm-retina .nm-title {
-    text-align: center;
     font-weight: bold;
-    background-image: none;
   }
   .nm-content > .nm-left {
     width: 100%;
@@ -871,16 +891,20 @@ html.nm-mobile body {
     border-left: none;
   }
 
+  .nm-contacts-loaded.nm-selected .nm-title {
+    background-image: none;
+    padding-left: 0px;
+    left: 38px;
+  }
+
   .nm-contacts-loaded.nm-selected .nm-toggle {
     display: block;
   }
 
-  .nm-contacts-loaded.nm-selected .nm-title {
-    left: 38px;
-  }
   .conversation-user {
     display: none;
   }
+
   .conversation-item {
     margin: 0 4px;
   }

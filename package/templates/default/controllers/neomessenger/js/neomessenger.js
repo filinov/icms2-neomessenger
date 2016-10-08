@@ -70,6 +70,23 @@ icms.neomessenger = (function ($) {
 
     /* ------------------------------------------------------------------------- */
 
+    this.getSoundEnabled = function() {
+        var soundEnabled = app.ls.get('soundEnabled');
+        if (soundEnabled === null) {
+            soundEnabled = true;
+            this.setSoundEnabled(soundEnabled);
+        }
+        return soundEnabled;
+    };
+
+    /* ------------------------------------------------------------------------- */
+
+    this.setSoundEnabled = function(soundEnabled) {
+        app.ls.set('soundEnabled', soundEnabled);
+    };
+
+    /* ------------------------------------------------------------------------- */
+
     this.widgetBtn = {
 
         append: function () {
@@ -155,6 +172,16 @@ icms.neomessenger = (function ($) {
                 app.modal.hide();
             });
 
+            $(this).on('click', '.nm-mute', function() {
+                var soundEnabled = !app.getSoundEnabled();
+                app.setSoundEnabled(soundEnabled);
+                if (soundEnabled) {
+                    $(this).addClass('nm-active');
+                } else {
+                    $(this).removeClass('nm-active');
+                }
+            });
+
             if (app.options.close_backdrop) {
                 $(this).on('click', function(e) {
                     e = e.originalEvent || e;
@@ -196,7 +223,6 @@ icms.neomessenger = (function ($) {
                 app.messages.setReaded();
             });
 
-            // Отмечать сообщение как прочитанное при наведении на него курсора
             $(this).on('click', '.conversation-item.is_can_select', function(e) {
                 var $target = $(e.target);
                 if (!$target.is('a')) {
@@ -1262,7 +1288,8 @@ icms.neomessenger = (function ($) {
             $metaTagTheme.attr('content', '#5580a3');
 
             var html = app.templates.mainModal({
-                htmlEditor: app.htmlEditor
+                htmlEditor: app.htmlEditor,
+                soundEnabled: app.getSoundEnabled()
             });
 
             $('body').append(html);
@@ -1411,6 +1438,8 @@ icms.neomessenger = (function ($) {
         }
 
         function playSound () {
+
+            if (!app.getSoundEnabled()) { return; }
 
             var now = +new Date();
 

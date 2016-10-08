@@ -2,12 +2,9 @@
     <div id="nm-dialog">
 
         <div class="nm-header">
-            <div class="nm-toggle nm-icon-hamburger-wrap">
-                <span class="nm-icon-bar"></span>
-                <span class="nm-icon-bar"></span>
-                <span class="nm-icon-bar"></span>
-            </div>
+            <div class="nm-toggle"></div>
             <div class="nm-title"><%= LANG_NEOMESSENGER_MAIN_TITLE %></div>
+            <div class="nm-mute<% if (soundEnabled) { %> nm-active<% } %>"></div>
             <div class="nm-close"></div>
         </div>
 
