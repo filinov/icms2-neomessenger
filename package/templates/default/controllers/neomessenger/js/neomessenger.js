@@ -1138,7 +1138,7 @@ icms.neomessenger = (function ($) {
 
         },
 
-        cancelSelected() {
+        cancelSelected: function() {
 
             var $chat = $('#nm-chat'),
                 $selectedMsg = $chat.find('.conversation-item.nm-selected');
@@ -1191,7 +1191,7 @@ icms.neomessenger = (function ($) {
 
         },
 
-        restoreMessages(linkObj) {
+        restoreMessages: function(linkObj) {
 
             var $chat = $('#nm-chat'),
                 $message = $(linkObj).closest('.conversation-item'),
