@@ -1408,7 +1408,7 @@ icms.neomessenger = (function ($) {
 
         function notify (data) {
 
-            if (Notification.permission !== 'granted') { return; }
+            if (!Notification || Notification.permission !== 'granted') { return; }
 
             try {
 
