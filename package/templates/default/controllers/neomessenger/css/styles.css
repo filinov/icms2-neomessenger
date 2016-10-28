@@ -260,8 +260,7 @@ html.nm-opened body {
   position: relative;
   list-style-type: none;
   margin: 0;
-  padding: 0;
-  height: 43px;
+  padding: 5px;
   cursor: pointer;
   border-bottom: 1px solid #ebedf0;
 }
@@ -425,6 +424,7 @@ li.selected .nm-online-status {
 
 .conversation-item {
   padding: 4px 8px;
+  margin-bottom: 1px;
   position: relative;
   transition: background 1s linear;
 }
@@ -533,7 +533,6 @@ li.selected .nm-online-status {
 .conversation-item.item-right .conversation-body:before {
   left: auto;
   right: -10px;
-  border-color: #e1e4e8 transparent transparent transparent;
 }
 
 .conversation-body > .author {
