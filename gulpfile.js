@@ -1,20 +1,30 @@
-'use strict';
+var gulp = require('gulp');
+var $ = require('gulp-load-plugins')({lazy: false});
 
-var gulp     = require('gulp');
-var template = require('gulp-template-compile');
-var replace  = require('gulp-replace');
-var concat   = require('gulp-concat');
+var assetsPath = './package/templates/default/controllers/neomessenger/';
 
 gulp.task('templates', function () {
-    gulp.src('src/templates/*.html')
-        .pipe(template({
+    return gulp.src('src/templates/*.html')
+        .pipe($.templateCompile({
             namespace: 'icms.neomessenger.templates',
             name: function (file) {
                 return file.relative.replace('.html', '');
             }
         }))
-        .pipe(concat('templates.js'))
-        .pipe(gulp.dest('package/templates/default/controllers/neomessenger/js/'));
+        .pipe($.concat('templates.min.js'))
+        .pipe($.uglify())
+        .pipe(gulp.dest(assetsPath + 'js'));
 });
 
-gulp.task('default', ['templates'], function () {});
+gulp.task('scripts:libs', function () {
+    return gulp.src([
+        'src/js/libs/*.js'
+    ])
+        .pipe($.concat('libs.min.js'))
+        .pipe($.uglify())
+        .pipe(gulp.dest(assetsPath + 'js'));
+});
+
+gulp.task('scripts', ['scripts:libs']);
+
+gulp.task('default', ['templates', 'scripts'], function () {});
