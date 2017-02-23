@@ -4,34 +4,20 @@ function install_package() {
 
     $core = cmsCore::getInstance();
 
-    if (
-        !$core->db->getRowsCount('scheduler_tasks', "controller = 'messages'") &&
-        !$core->db->getRowsCount('scheduler_tasks', "controller = 'neomessenger'")
-    ) {
-        $core->db->query("INSERT INTO `{#}scheduler_tasks` (`title`, `controller`, `hook`, `period`, `is_active`) VALUES ('Очистка удалённых личных сообщений (удалить задание на icms версии 2.6.0 и выше)', 'neomessenger', 'clean', '1440', '1');");
+    // Задача для планировщика
+    if (!$core->db->getRowsCount('scheduler_tasks', "controller = 'neomessenger'")) {
+        $core->db->query("INSERT INTO `{#}scheduler_tasks` (`title`, `controller`, `hook`, `period`, `is_active`) VALUES ('Очистка удалённых личных сообщений', 'neomessenger', 'clean', '1440', '1');");
     }
 
-    if (!isFieldExists('{users}_messages', 'is_deleted')) {
-        $core->db->query("ALTER TABLE `{users}_messages` ADD `is_deleted` TINYINT(1) UNSIGNED NULL DEFAULT NULL");
+    // Флаг удаления сообщения получателем
+    if (!isFieldExists('{users}_messages', 'is_deleted_to')) {
+        $core->db->query("ALTER TABLE `{users}_messages` ADD `is_deleted_to` TINYINT(1) UNSIGNED NULL DEFAULT NULL");
     }
 
-    if (!isFieldExists('{users}_messages', 'date_delete')) {
-        $core->db->query("ALTER TABLE `{users}_messages` ADD `date_delete` TIMESTAMP NULL DEFAULT NULL COMMENT 'Дата удаления' AFTER `date_pub`, ADD INDEX (`date_delete`);");
+    // Флаг удаления сообщения отправителем
+    if (!isFieldExists('{users}_messages', 'is_deleted_from')) {
+        $core->db->query("ALTER TABLE `{users}_messages` ADD `is_deleted_from` TINYINT(1) UNSIGNED NULL DEFAULT NULL");
     }
-
-    $core->db->query("ALTER TABLE `{users}_messages` CHANGE `date_pub` `date_pub` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата создания'");
-
-    $remove_files = array(
-        'templates/default/controllers/neomessenger/styles.css'
-    );
-
-    if ($remove_files) {
-        foreach ($remove_files as $file_path) {
-            $file_path = cmsConfig::get('root_path') . $file_path;
-            @unlink($file_path);
-        }
-    }
-
 
     return true;
 

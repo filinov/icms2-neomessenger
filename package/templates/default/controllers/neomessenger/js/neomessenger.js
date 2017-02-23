@@ -1,3 +1,10 @@
+/**
+ * --------------------------------------------------------------------------
+ * Neomessenger v2.5.0
+ * Copyright 2013-2017 Victor Filinov aka NEOm@ster
+ * --------------------------------------------------------------------------
+ */
+
 var icms = icms || {};
 var nm = nm || {};
 
@@ -441,7 +448,7 @@ icms.neomessenger = (function ($) {
         if (app.options.is_favicon_count) {
             app.setFavicon(value);
         }
-        
+
         //API для разработчиков
 		if (typeof(icms.neomessenger.MessagesCounterCallback) == 'function' && value > 0){
             icms.neomessenger.MessagesCounterCallback(value);
@@ -1193,8 +1200,7 @@ icms.neomessenger = (function ($) {
 
         restoreMessages: function(linkObj) {
 
-            var $chat = $('#nm-chat'),
-                $message = $(linkObj).closest('.conversation-item'),
+            var $message = $(linkObj).closest('.conversation-item'),
                 msg_id = $message.attr('rel');
 
             app.post('restore_message', { message_id: msg_id }, function (result) {

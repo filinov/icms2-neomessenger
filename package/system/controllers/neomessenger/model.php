@@ -3,44 +3,6 @@
 class modelNeomessenger extends cmsModel {
 
     /**
-     * Обработка сообщения взятого из базы
-     * @param $item
-     * @param $model
-     * @return mixed
-     */
-//    public function prepareMessage($item, $model) {
-//
-//        $item['id'] = (int)$item['id'];
-//        $item['to_id'] = (int)$item['to_id'];
-//        $item['from_id'] = (int)$item['from_id'];
-//
-//        $item['user'] = array(
-//            'id'       => $item['from_id'],
-//            'nickname' => $item['user_nickname'],
-//            'url'      => href_to('users', $item['from_id']),
-//            'avatar'   => html_avatar_image_src($item['user_avatar'], 'micro')
-//        );
-//
-//        $timestamp = strtotime($item['date_pub']);
-//
-//        if ($timestamp + 86400 < time()) {
-//            $format = 'j F';
-//            if (date('Y', $timestamp) !== date('Y')) {
-//                $format .= ' Y';
-//            }
-//        } else {
-//            $format = 'H:i';
-//        }
-//
-//        $new_date = date($format, $timestamp);
-//
-//        $item['time'] = lang_date($new_date);
-//
-//        return $item;
-//
-//    }
-
-    /**
      * Извлечение сообщений из базы от определенного контакта
      * @param $user_id
      * @param $contact_id
@@ -54,8 +16,20 @@ class modelNeomessenger extends cmsModel {
 
         if ($this->filter_on) { $this->filterAnd(); }
 
-        $this->filterIn('from_id', array($user_id, $contact_id));
-        $this->filterIn('to_id', array($user_id, $contact_id));
+        $this->filterStart();
+
+        $this->filterEqual('from_id', $user_id);
+        $this->filterEqual('to_id', $contact_id);
+        $this->filterIsNull('is_deleted_from');
+
+        $this->filterOr();
+
+        $this->filterEqual('from_id', $contact_id);
+        $this->filterEqual('to_id', $user_id);
+        $this->filterIsNull('is_deleted_to');
+
+        $this->filterEnd();
+
         $this->filterIsNull('is_deleted');
 
         $this->orderBy('id', 'desc');
@@ -111,6 +85,7 @@ class modelNeomessenger extends cmsModel {
 
         $this->filterStart();
         $this->filterEqual('to_id', $user_id);
+        $this->filterIsNull('is_deleted_to');
         $this->filterIsNull('is_deleted');
         $this->filterEnd();
 
@@ -218,6 +193,7 @@ class modelNeomessenger extends cmsModel {
     public function getLastMessageID($user_id) {
 
         $this->filterEqual('to_id', $user_id);
+        $this->filterIsNull('is_deleted_to');
         $this->filterIsNull('is_deleted');
 
         $this->orderBy('id', 'desc');
@@ -235,6 +211,7 @@ class modelNeomessenger extends cmsModel {
 
         $this->filterEqual('to_id', $user_id);
         $this->filterEqual('is_new', 1);
+        $this->filterIsNull('is_deleted_to');
         $this->filterIsNull('is_deleted');
 
         $count = $this->getCount('{users}_messages');
@@ -244,42 +221,10 @@ class modelNeomessenger extends cmsModel {
     }
 
     /**
-     * Удаление сообщений
-     * @param $user_id
-     * @param $ids
-     * @return mixed
-     */
-    public function deleteMessages($user_id, $ids) {
-
-        $this->filterEqual('from_id', $user_id);
-        $this->filterIn('id', $ids);
-
-        return $this->updateFiltered('{users}_messages', array(
-            'is_deleted'  => 1,
-            'date_delete' => NULL
-        ));
-
-    }
-
-    /**
-     * Восстановление удаленных сообщений
-     * @param $user_id
+     * Удаление контроллера
      * @param $id
-     * @return mixed
+     * @return bool
      */
-    public function restoreMessages($user_id, $id) {
-
-        $this->filterEqual('from_id', $user_id);
-        $this->filterEqual('id', $id);
-
-        return $this->updateFiltered('{users}_messages', array(
-            'is_deleted'  => null,
-            'date_delete' => false
-        ));
-
-    }
-
-
     public function deleteController($id) {
 
         parent::deleteController($id);

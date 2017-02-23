@@ -27,6 +27,8 @@ class actionNeomessengerGetMessages extends cmsAction {
             $has_older = false;
         }
 
+        $messages = cmsEventsManager::hook("neomessenger_messages_list", $messages);
+
         $template->renderJSON(array(
             'messages' => $messages,
             'has_older' => $has_older,

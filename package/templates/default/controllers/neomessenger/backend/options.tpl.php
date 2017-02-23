@@ -8,13 +8,7 @@
         'href'  => "javascript:icms.forms.submit()"
     ));
 
-?>
-
-<?php
-
     $this->renderForm($form, $options, array(
         'action' => '',
         'method' => 'post'
     ), $errors);
-
-?>

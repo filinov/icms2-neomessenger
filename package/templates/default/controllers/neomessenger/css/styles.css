@@ -1,3 +1,9 @@
+/*
+---------------------------------------------------------------------------------------------------
+  ВНИМАНИЕ!!! Изменение стилей в этом файле не рекомендуется, для этого используйте файл custom.css
+---------------------------------------------------------------------------------------------------
+*/
+
 .clearfix:before,
 .clearfix:after {
   content: " ";
@@ -442,6 +448,11 @@ li.selected .nm-online-status {
   position: absolute;
   background: url(../images/msg_select.png) no-repeat;
   opacity: .6;
+}
+
+.conversation-item.item-left .nm-message-check {
+  left: auto;
+  right: 8px;
 }
 
 .conversation-item.new,

@@ -4,14 +4,23 @@ class onNeomessengerCronClean extends cmsAction {
 
     public function run() {
 
-        if (empty($this->options['time_delete_old'])) {
-            return false;
-        }
+        $this->model->filterNotNull('is_deleted_to');
+        $this->model->filterNotNull('is_deleted_from');
+        $this->model->lockFilters();
 
-        $this->model
-            ->filterDateOlder('date_pub', $this->options['time_delete_old'])
-            ->filterNotNull('is_deleted')
-            ->deleteFiltered('{users}_messages');
+        $delete_msg_ids = $this->model->selectOnly('id')->get('{users}_messages', function($item, $model) {
+            return $item['id'];
+        }, false);
+
+        $this->model->unlockFilters();
+
+        if ($delete_msg_ids) {
+
+            $this->model->deleteFiltered('{users}_messages');
+
+            cmsEventsManager::hookAll('neomessenger_messages_delete', $delete_msg_ids);
+
+        }
 
         return true;
 

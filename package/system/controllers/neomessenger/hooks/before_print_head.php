@@ -14,13 +14,16 @@ class onNeomessengerBeforePrintHead extends cmsAction {
             return $template;
         }
 
-        if ($user->isInGroups($this->options['groups_allowed'])) {
-            $this->appConfiguration();
-            $this->addFilesToPage();
-            $this->applyStyle();
-            $this->addLangJS();
-            cmsEventsManager::hook('neomessenger_start');
+        if (!$user->isInGroups($this->options['groups_allowed'])) {
+            return $template;
         }
+
+        $this->appConfiguration();
+        $this->addFilesToPage();
+        $this->applyStyle();
+        $this->addLangJS();
+
+        cmsEventsManager::hook('neomessenger_start');
 
         return $template;
 
@@ -47,19 +50,11 @@ class onNeomessengerBeforePrintHead extends cmsAction {
         $template->setContext($this);
 
         $template->addControllerCSS('styles');
+        $template->addControllerCSS('custom');
 
-        if (isset($this->options['is_favicon_count']) && $this->options['is_favicon_count']) {
-            $template->addControllerJS('libs/favico');
-        }
-
-        if (isset($this->options['is_title_count']) && $this->options['is_title_count']) {
-            $template->addControllerJS('libs/animatetitle');
-        }
-
-        $template->addControllerJS('libs/jquery.waitforimages');
-        $template->addControllerJS('libs/underscore');
+        $template->addControllerJS('libs.min');
         $template->addControllerJS('neomessenger');
-        $template->addControllerJS('templates');
+        $template->addControllerJS('templates.min');
 
         $template->restoreContext();
 
