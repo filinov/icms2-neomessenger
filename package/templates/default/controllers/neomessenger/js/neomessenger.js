@@ -5,6 +5,8 @@
  * --------------------------------------------------------------------------
  */
 
+// TODO: Нужно что-то менять (все переписывать).
+
 var icms = icms || {};
 var nm = nm || {};
 
@@ -204,27 +206,6 @@ icms.neomessenger = (function ($) {
                 app.contacts.select($(this).attr('rel'));
             });
 
-            $(this).on('keydown', '#editor-nm-msg-field', function(e) {
-                if (app.options.send_enter) {
-                    if (e.keyCode === 13) {
-                        if (e.ctrlKey) {
-                            $(this).val($(this).val() + "\r");
-                        } else {
-                            app.messages.send();
-                        }
-                    }
-                } else {
-                    if (e.keyCode === 13 && e.ctrlKey) {
-                        app.messages.send();
-                    }
-                }
-            });
-
-            // Сохранение текста в LocalStorage
-            $(this).on('blur change keyup', '#editor-nm-msg-field', function(e) {
-                app.draft.update();
-            });
-
             // Отмечать сообщение как прочитанное при наведении на него курсора
             $(this).on('mouseenter click', '.conversation-item.new', function() {
                 app.messages.setReaded();
@@ -326,6 +307,8 @@ icms.neomessenger = (function ($) {
                     if (result.messages) {
 
                         $.each(result.messages, function () {
+                            var message = this.content;
+
                             if (this.from_id == app.contacts.current.id) {
                                 app.messages.add(this);
                             }
@@ -338,7 +321,7 @@ icms.neomessenger = (function ($) {
                                 title: this.user.nickname,
                                 tag: 'nm_msg' + this.user.id,
                                 image: this.user.avatar,
-                                message: this.content,
+                                message: message,
                                 contact_id: this.user.id
                             });
                         });
@@ -577,8 +560,6 @@ icms.neomessenger = (function ($) {
                     return;
                 }
             });
-
-            icms.events.run('neomessenger_contact_selected', { id: id });
 
             app.messages.load(id);
 
@@ -821,9 +802,9 @@ icms.neomessenger = (function ($) {
             $('#nm-chat-wrapper').hide();
             $('#nm-msg-loading').show();
             $('#nm-chat').html('').unbind('scroll');
-            $('#editor-nm-msg-field').val(draft_text);
 
-            icms.events.run('neomessenger_editor_text', { text: draft_text });
+            app.editor.init();
+            app.editor.setValue(draft_text);
 
             //this.lastId = 0;
             this.older_id = false;
@@ -871,10 +852,7 @@ icms.neomessenger = (function ($) {
                     });
 
                     if (app.recipientId > 0) {
-                        var $form = $('#nm-dialog .nm-editor form'),
-                            $input = $('textarea', $form);
-
-                        $input.focus();
+                        app.editor.focus();
                         app.recipientId = 0;
                     }
 
@@ -895,21 +873,13 @@ icms.neomessenger = (function ($) {
 
         add: function(message, prepend) {
 
-            function addMessage(msg) {
-                $('#nm-chat')[(prepend ? 'prepend' : 'append')](app.templates.message({
-                    is_my: app.currentUser.id == message.from_id,
-                    is_new: message.is_new == 1 && app.currentUser.id != message.from_id,
-                    msg: msg
-                }));
-            }
+            message.content = app.editor.prepareMessage(message.content);
 
-            if (icms.events.listeners['neomessenger_message_add']) {
-                icms.events.run('neomessenger_message_add', {
-                    msg: message, callback: addMessage
-                });
-            } else {
-                addMessage(message);
-            }
+            $('#nm-chat')[(prepend ? 'prepend' : 'append')](app.templates.message({
+                is_my: app.currentUser.id == message.from_id,
+                is_new: message.is_new == 1 && app.currentUser.id != message.from_id,
+                message: message
+            }));
 
         },
 
@@ -985,22 +955,22 @@ icms.neomessenger = (function ($) {
             if (this._sendLock) { return; }
 
             var self = app.messages,
-                $editor = $('#nm-dialog .nm-editor'),
                 $chat = $('#nm-chat'),
-                $input = $('textarea', $editor),
-                content = $input.val().trim(),
                 to_id = app.contacts.current.id;
 
+            var content = app.editor.getValue();
+
             if (!app.isMobile) {
-                $input.focus();
+                app.editor.focus();
             }
 
             if (!content) { return; }
 
-            $input.attr('disabled', 'disabled');
+            app.editor.setValue('');
+            app.editor.disable();
+            app.draft.del(to_id);
 
             app.contacts.top(to_id);
-
             self.sendLock();
             app.contacts.lock();
             app.isRefreshEnabled = false;
@@ -1016,7 +986,7 @@ icms.neomessenger = (function ($) {
                 is_my: true,
                 is_new: false,
                 temp: true,
-                msg: {
+                message: {
                     id: 'temp-msg',
                     content: '<div class="nm-temp-msg-loading"></div>',
                     user: {
@@ -1029,51 +999,28 @@ icms.neomessenger = (function ($) {
             $chat.append(tempMsgHtml);
             self.scroll();
 
-            self.setReaded();
-
             app.post('send_message', form_data, function (result) {
 
-                var newMessagesCount = 0,
-                    messages = result.messages;
+                var messages = result.messages;
 
                 $chat.find('#nm-message-temp-msg').remove();
-                $input.removeAttr('disabled').val('');
+
+                app.editor.enable();
 
                 if (!app.isMobile) {
-                    $input.focus();
+                    app.editor.focus();
                 }
-
-                app.draft.del(to_id);
 
                 if (!result.error) {
 
                     if (messages) {
 
                         for (var i = 0; i < messages.length; i++) {
-                            var message = messages[i];
-                            if (message.is_new == "1" && message.from_id != app.currentUser.id) {
-                                newMessagesCount++;
-                            }
-                            self.add(message);
-                            if (message.id > self.lastId) {
-                                self.lastId = message.id;
+                            self.add(messages[i]);
+                            if (messages[i].id > self.lastId) {
+                                self.lastId = messages[i].id;
                             }
                         }
-
-                        if (newMessagesCount) {
-                            var newCount = app.messagesCount + newMessagesCount;
-                            app.setMessagesCounter(newCount);
-                        }
-
-                        var $contact = $('#nm-contact' + app.contacts.current.id),
-                            $counter = $('.counter', $contact),
-                            old_count = 0;
-
-                        if ($counter.length) {
-                            old_count = parseInt($counter.attr('rel'));
-                        }
-
-                        app.contacts.setCounter(app.contacts.current.id, newMessagesCount + old_count);
 
                         $chat.waitForImages({
                             finished: function() {
@@ -1095,6 +1042,7 @@ icms.neomessenger = (function ($) {
 
                 }
 
+                self.setReaded();
                 app.isRefreshEnabled = true;
                 app.contacts.unLock();
                 self.sendUnLock();
@@ -1234,7 +1182,7 @@ icms.neomessenger = (function ($) {
 
         update: function() {
 
-            var text = $('#editor-nm-msg-field').val();
+            var text = app.editor.getValue();
 
             app.ls.set('nm_draft_' + app.currentUser.id + '_' + app.contacts.current.id, {text: text});
 
@@ -1344,6 +1292,8 @@ icms.neomessenger = (function ($) {
 
             });
 
+            app.editor.destroy();
+
             this.visible = false;
 
         },
@@ -1418,8 +1368,10 @@ icms.neomessenger = (function ($) {
 
             try {
 
+                var body = app.editor.cleanMessage(data.message);
+
                 var notification = new Notification(data.title, {
-                    body: data.message,
+                    body: body,
                     icon: data.image,
                     tag: data.tag
                 });

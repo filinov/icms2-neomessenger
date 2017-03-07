@@ -32,7 +32,7 @@ class neomessenger extends cmsFrontend {
      */
     public function getNmOptions() {
 
-        return array(
+        $options = array(
             'refreshInterval'    => $this->options['refresh_interval'],
             'send_enter'         => (bool)$this->options['send_enter'],
             'close_backdrop'     => (bool)$this->options['close_backdrop'],
@@ -41,6 +41,13 @@ class neomessenger extends cmsFrontend {
             'is_favicon_count'   => (bool)$this->options['is_favicon_count'],
             'root_url'           => cmsConfig::get('root')
         );
+
+        if (cmsCore::isControllerExists('nm_extends') && cmsController::enabled('nm_extends')) {
+            $controller = cmsCore::getController('nm_extends');
+            $options['extends'] = $controller->getExtendsOptions();
+        }
+
+        return $options;
 
     }
 
@@ -65,28 +72,14 @@ class neomessenger extends cmsFrontend {
      */
     public function getHtmlEditor() {
 
-        $editor = $this->options['html_editor'];
-        $field_id = 'nm-msg-field';
-        $options = array(
-            'id' => 'editor-' . $field_id,
-            'placeholder' => 'Введите ваше сообщение...'
-        );
-
-        if (!$editor || $editor == 'default') {
-
-            return cmsTemplate::getInstance()->renderInternal($this, 'editor', array(
-                'field_id' => $field_id,
-                'options' => $options
-            ));
-
-        } else {
-
-            $editor_controller = cmsCore::getController($editor, new cmsRequest(array(), cmsRequest::CTX_INTERNAL));
-
-            return $editor_controller->getEditorWidget($field_id, '', $options);
-
+        if (cmsCore::isControllerExists('nm_extends') && cmsController::enabled('nm_extends')) {
+            $controller = cmsCore::getController('nm_extends');
+            if ($controller->editorEnabled()) {
+                return $controller->getEditor();
+            }
         }
 
+        return cmsTemplate::getInstance()->renderInternal($this, 'editor');
 
     }
 

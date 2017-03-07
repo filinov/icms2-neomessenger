@@ -23,8 +23,6 @@ class onNeomessengerBeforePrintHead extends cmsAction {
         $this->applyStyle();
         $this->addLangJS();
 
-        cmsEventsManager::hook('neomessenger_start');
-
         return $template;
 
     }

@@ -47,18 +47,6 @@ class formNeomessengerOptions extends cmsForm {
                         'default' => 1
                     )),
 
-                    new fieldList('html_editor', array(
-                        'title' => LANG_PARSER_HTML_EDITOR,
-                        'default' => 'default',
-                        'generator' => function() {
-                            $items = array();
-                            $editors = cmsEventsManager::hookAll('neomessenger_editor');
-                            $editors[] = 'default';
-                            foreach($editors as $editor) { $items[$editor] = $editor; }
-                            return $items;
-                        }
-                    )),
-
                     new fieldString('fixed_contacts', array(
                         'title' => LANG_NEOMESSENGER_CP_FIXED_CONTACTS,
                         'hint' => LANG_NEOMESSENGER_CP_FIXED_CONTACTS_HINT
