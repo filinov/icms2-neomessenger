@@ -141,7 +141,7 @@ class modelNeomessenger extends cmsModel {
         $this->select('IFNULL(COUNT(m.id), 0)', 'new_messages');
 
         $this->join('{users}', 'u', 'u.id = i.contact_id');
-        $this->joinLeft('{users}_messages', 'm', 'm.from_id = i.contact_id AND m.to_id = i.user_id AND m.is_new = 1');
+        $this->joinLeft('{users}_messages', 'm', 'm.from_id = i.contact_id AND m.to_id = i.user_id AND m.is_new = 1 AND m.is_deleted_to IS NULL');
 
         $this->filterEqual('user_id', $user_id);
 
