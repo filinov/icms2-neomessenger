@@ -43,7 +43,7 @@ html.nm-opened body {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 500;
+  z-index: 99;
   overflow: hidden;
 }
 #nm-dialog {
@@ -357,7 +357,6 @@ li.selected .nm-online-status {
 #nm-msg-loading {
   background: url("../images/preloader.gif") no-repeat center;
   height: 100%;
-  display: none;
 }
 
 /* Contact Panel
@@ -398,7 +397,6 @@ li.selected .nm-online-status {
 }
 
 #nm-chat-wrapper {
-  display: none;
   height: 100%;
   position: relative;
 }

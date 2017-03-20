@@ -2,13 +2,13 @@
 
     var className = 'conversation-item is_can_select clearfix';
 
-    if (is_my) {
+    if (message.is_my) {
         className += ' item-right';
     } else {
         className += ' item-left';
     }
 
-    if (is_new) {
+    if (message.is_new) {
         className += ' new'
     }
 

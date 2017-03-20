@@ -31,11 +31,6 @@ class backendNeomessenger extends cmsBackend {
             ),
 
             array(
-                'title' => LANG_NM_SUPPORT,
-                'url' => LANG_NM_SUPPORT_URL
-            ),
-
-            array(
                 'title' => LANG_NEOMESSENGER_CP_THANKS,
                 'url' => href_to($this->root_url, 'donate')
             ),

@@ -33,6 +33,11 @@ class actionNeomessengerMoreMessages extends cmsAction {
             $messages = array_reverse($messages);
         }
 
+        if ($messages && $this->isExtendsEnabled()) {
+            $extends_ctrl = cmsCore::getController('nm_extends');
+            $messages = $extends_ctrl->prepareMessages($messages);
+        }
+
         $template->renderJSON(array(
             'messages' => $messages,
             'has_older' => $has_older

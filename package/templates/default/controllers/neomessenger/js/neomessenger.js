@@ -39,6 +39,8 @@ icms.neomessenger = (function ($) {
         this.currentUser = nm.currentUser;
         this.htmlEditor  = nm.htmlEditor;
 
+        this.editors     = {};
+
         this.isMobile    = this.detectMobile();
         this.isRetina    = this.detectRetina();
         this.favicon     = this.initFavicon();
@@ -459,6 +461,7 @@ icms.neomessenger = (function ($) {
 
         contactsList: [],
         current: {},
+        previousID: null,
         _lock: false,
 
         load: function(id) {
@@ -797,16 +800,17 @@ icms.neomessenger = (function ($) {
         load: function(id) {
 
             var self = app.messages;
-            var draft_text = app.draft.get(id);
+            var previousID = app.contacts.previousID;
 
-            $('#nm-chat-wrapper').hide();
-            $('#nm-msg-loading').show();
-            $('#nm-chat').html('').unbind('scroll');
+            if (previousID && $('#nm-editor').length) {
+                app.editors[previousID] = $('#nm-editor').detach();
+            }
 
-            app.editor.init();
-            app.editor.setValue(draft_text);
+            app.contacts.previousID = id;
 
-            //this.lastId = 0;
+            $('#nm-chat').unbind('scroll');
+            $('#nm-right').html(app.templates.messagesLoading());
+
             this.older_id = false;
             this._sendLock = false;
             this.oldLoading = false;
@@ -822,9 +826,17 @@ icms.neomessenger = (function ($) {
                     self.csrf_token = result.csrf_token;
                     var messages = result.messages;
 
+                    $('#nm-right').html(app.templates.chatWrapper());
                     $('#nm-contact-panel').html(app.templates.contactPanel({ contact: app.contacts.current }));
-                    $('#nm-msg-loading').hide();
-                    $('#nm-chat-wrapper').show();
+
+                    if (app.editors[id]) {
+                        $('#nm-composer').append(app.editors[id]);
+                    } else {
+                        $('#nm-composer').html(app.htmlEditor);
+                    }
+
+                    app.editor.init();
+                    app.editor.setValue(app.draft.get(id));
 
                     if (messages) {
                         self.older_id = messages[0].id;
@@ -873,13 +885,10 @@ icms.neomessenger = (function ($) {
 
         add: function(message, prepend) {
 
-            message.content = app.editor.prepareMessage(message.content);
+            message.is_my = app.currentUser.id == message.from_id;
+            message.is_new = message.is_new == 1 && app.currentUser.id != message.from_id;
 
-            $('#nm-chat')[(prepend ? 'prepend' : 'append')](app.templates.message({
-                is_my: app.currentUser.id == message.from_id,
-                is_new: message.is_new == 1 && app.currentUser.id != message.from_id,
-                message: message
-            }));
+            $('#nm-chat')[(prepend ? 'prepend' : 'append')](app.renderMessage(message));
 
         },
 
@@ -983,11 +992,11 @@ icms.neomessenger = (function ($) {
             };
 
             var tempMsgHtml = app.templates.message({
-                is_my: true,
-                is_new: false,
                 temp: true,
                 message: {
                     id: 'temp-msg',
+                    is_my: true,
+                    is_new: false,
                     content: '<div class="nm-temp-msg-loading"></div>',
                     user: {
                         avatar: app.currentUser.avatar,
@@ -1241,10 +1250,7 @@ icms.neomessenger = (function ($) {
 
             $metaTagTheme.attr('content', '#5580a3');
 
-            var html = app.templates.mainModal({
-                htmlEditor: app.htmlEditor,
-                soundEnabled: app.getSoundEnabled()
-            });
+            var html = app.templates.mainModal({ soundEnabled: app.getSoundEnabled() });
 
             $('body').append(html);
 
@@ -1267,6 +1273,12 @@ icms.neomessenger = (function ($) {
             var self = app.modal;
             var $metaTag = $('meta[name=viewport]');
             var $metaTagTheme = $('meta[name=theme-color]');
+
+            var contactId = app.contacts.current.id;
+
+            if (contactId && $('#nm-editor').length) {
+                app.editors[contactId] = $('#nm-editor').detach();
+            }
 
             this.$bg.trigger('nm_closed');
             this.$el.fadeOut(function() {

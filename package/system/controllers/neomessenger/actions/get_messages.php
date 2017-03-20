@@ -27,7 +27,10 @@ class actionNeomessengerGetMessages extends cmsAction {
             $has_older = false;
         }
 
-        $messages = cmsEventsManager::hook("neomessenger_messages_list", $messages);
+        if ($messages && $this->isExtendsEnabled()) {
+            $extends_ctrl = cmsCore::getController('nm_extends');
+            $messages = $extends_ctrl->prepareMessages($messages);
+        }
 
         $template->renderJSON(array(
             'messages' => $messages,

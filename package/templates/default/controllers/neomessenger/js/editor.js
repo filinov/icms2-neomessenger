@@ -44,10 +44,6 @@ icms.neomessenger = (function ($) {
             this.field.removeAttr('disabled');
         };
 
-        this.prepareMessage = function (message) {
-            return message;
-        };
-
         this.cleanMessage = function (message) {
             return message;
         };
@@ -88,6 +84,10 @@ icms.neomessenger = (function ($) {
         return this;
 
     }).call({});
+
+    this.renderMessage = function (message) {
+        return nm.templates.message({ message: message });
+    };
 
     return this;
 

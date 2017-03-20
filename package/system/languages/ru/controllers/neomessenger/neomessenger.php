@@ -1,6 +1,7 @@
 <?php
 
     define('LANG_NEOMESSENGER_CONTROLLER',                       'NeoMessenger');
+    define('LANG_HELP_URL_COM_NEOMESSENGER',                     'https://vk.com/neomessenger');
 
     // Фронтенд
     define('LANG_NEOMESSENGER_MAIN_TITLE',                       'Моя переписка');
@@ -81,10 +82,10 @@
     define('LANG_NEOMESSENGER_CP_YANDEXMONEY',                   'YandexMoney');
     define('LANG_NEOMESSENGER_CP_DONATE_MESSAGE',                'Здравствуй друг! Если тебе понравился компонент, и ты хочешь что-бы он дальше развивался, и улучшался - поддержи компонент финансово, спасибо. Сумму ты можешь указать абсолютно любую.');
 
-    define('LANG_NM_ENTER_MESSAGE',                              'Введите ваше сообщение...');
-    define('LANG_NM_EXTENDS',                                    'Расширенные возможности');
-    define('LANG_NM_SUPPORT',                                    'Помощь');
-    define('LANG_NM_SUPPORT_URL',                                'https://vk.com/neomessenger');
 
+
+    define('LANG_NM_ENTER_MESSAGE',                              'Введите ваше сообщение...');
+
+    define('LANG_NM_EXTENDS',                                    'Расширенные возможности');
     define('LANG_NM_EXTENDS_NOT_INSTALLED',                      'Пакет дополнений <b>"Расширенные возможности"</b> не установлен, для его покупки и установки перейдите на <a href="#" target="_blank">страницу компонента</a>');
     define('LANG_NM_EXTENDS_DISABLED',                           'Пакет дополнений <b>"Расширенные возможности"</b> отключен, включите его в панели управления компонентами.');

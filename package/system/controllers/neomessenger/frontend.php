@@ -1,13 +1,7 @@
 <?php
 
-/**
- * Class neomessenger
- */
 class neomessenger extends cmsFrontend {
 
-    /**
-     * @var bool
-     */
     protected $useOptions = true;
 
     /**
@@ -44,7 +38,7 @@ class neomessenger extends cmsFrontend {
 
         if (cmsCore::isControllerExists('nm_extends') && cmsController::enabled('nm_extends')) {
             $controller = cmsCore::getController('nm_extends');
-            $options['extends'] = $controller->getExtendsOptions();
+            $options['extends'] = $controller->getOptions();
         }
 
         return $options;
@@ -68,11 +62,28 @@ class neomessenger extends cmsFrontend {
     }
 
     /**
+     * @return bool
+     */
+    public function isExtendsEnabled() {
+
+        if (!cmsCore::isControllerExists('nm_extends')) {
+            return false;
+        }
+
+        if (!cmsController::enabled('nm_extends')) {
+            return false;
+        }
+
+        return true;
+
+    }
+
+    /**
      * @return string
      */
     public function getHtmlEditor() {
 
-        if (cmsCore::isControllerExists('nm_extends') && cmsController::enabled('nm_extends')) {
+        if ($this->isExtendsEnabled()) {
             $controller = cmsCore::getController('nm_extends');
             if ($controller->editorEnabled()) {
                 return $controller->getEditor();

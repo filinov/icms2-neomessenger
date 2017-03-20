@@ -16,6 +16,11 @@ class actionNeomessengerGetUpdate extends cmsAction {
 
         $messages_count = $this->model->getNewMessagesCount($user->id);
 
+        if ($messages && $this->isExtendsEnabled()) {
+            $extends_ctrl = cmsCore::getController('nm_extends');
+            $messages = $extends_ctrl->prepareMessages($messages);
+        }
+
         cmsTemplate::getInstance()->renderJSON(array(
             'error' => false,
             'contacts' => $contacts,

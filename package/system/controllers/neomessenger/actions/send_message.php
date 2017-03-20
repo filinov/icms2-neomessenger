@@ -8,6 +8,12 @@ class actionNeomessengerSendMessage extends cmsAction {
         $template = cmsTemplate::getInstance();
         $messenger = cmsCore::getController('messages');
 
+        $extends_ctrl = false;
+
+        if ($this->isExtendsEnabled()) {
+            $extends_ctrl = cmsCore::getController('nm_extends');
+        }
+
         $contact_id  = $this->request->get('contact_id');
         $content     = $this->request->get('content');
         $last_id     = $this->request->get('last_id');
@@ -47,9 +53,18 @@ class actionNeomessengerSendMessage extends cmsAction {
 
         if ($content_html) {
 
+            if ($extends_ctrl) {
+                $content_html = $extends_ctrl->parseMessage($content_html);
+            }
+
             $messenger->setSender($user->id);
             $messenger->addRecipient($contact_id);
-            $messenger->sendMessage($content_html);
+
+            $msg_id = $messenger->sendMessage($content_html);
+
+            if ($extends_ctrl) {
+                $extends_ctrl->addAttacments($msg_id, $extends_ctrl->parseAttach($content));
+            }
 
             $is_online = cmsUser::userIsOnline($contact_id);
 
@@ -63,6 +78,10 @@ class actionNeomessengerSendMessage extends cmsAction {
         $messages = $this->model
             ->filterGt('id', $last_id)
             ->getMessages($user->id, $contact_id);
+
+        if ($messages && $extends_ctrl) {
+            $messages = $extends_ctrl->prepareMessages($messages);
+        }
 
         $template->renderJSON(array(
             'error' => false,

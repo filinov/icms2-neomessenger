@@ -18,7 +18,9 @@ class onNeomessengerCronClean extends cmsAction {
 
             $this->model->deleteFiltered('{users}_messages');
 
-            cmsEventsManager::hookAll('neomessenger_messages_delete', $delete_msg_ids);
+            if ($this->isExtendsEnabled()) {
+                cmsCore::getController('nm_extends')->deleteMessages($delete_msg_ids);
+            }
 
         }
 
