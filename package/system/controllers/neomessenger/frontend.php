@@ -36,7 +36,7 @@ class neomessenger extends cmsFrontend {
             'root_url'           => cmsConfig::get('root')
         );
 
-        if (cmsCore::isControllerExists('nm_extends') && cmsController::enabled('nm_extends')) {
+        if ($this->isExtendsEnabled()) {
             $controller = cmsCore::getController('nm_extends');
             $options['extends'] = $controller->getOptions();
         }
@@ -70,7 +70,17 @@ class neomessenger extends cmsFrontend {
             return false;
         }
 
-        if (!cmsController::enabled('nm_extends')) {
+        $controller = cmsCore::getController('nm_extends');
+
+        if (!$controller->isControllerInstalled('nm_extends')) {
+            return false;
+        }
+
+        if (!$controller->isEnabled()) {
+            return false;
+        }
+
+        if (!$controller->isActivated()) {
             return false;
         }
 

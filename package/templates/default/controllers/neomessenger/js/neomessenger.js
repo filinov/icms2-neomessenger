@@ -1382,24 +1382,28 @@ icms.neomessenger = (function ($) {
 
                 var body = app.editor.cleanMessage(data.message);
 
-                var notification = new Notification(data.title, {
-                    body: body,
-                    icon: data.image,
-                    tag: data.tag
-                });
+                if (body) {
 
-                notification.onclick = function () {
-                    notification.close();
-                    window.focus();
-                    notificationsClear();
-                    app.contacts.select(data.contact_id);
-                };
+                    var notification = new Notification(data.title, {
+                        body: body,
+                        icon: data.image,
+                        tag: data.tag
+                    });
 
-                notification.onclose = function () {
-                    notificationsClear();
-                };
+                    notification.onclick = function () {
+                        notification.close();
+                        window.focus();
+                        notificationsClear();
+                        app.contacts.select(data.contact_id);
+                    };
 
-                notifications[data.tag] = notification;
+                    notification.onclose = function () {
+                        notificationsClear();
+                    };
+
+                    notifications[data.tag] = notification;
+
+                }
 
             } catch (e) {
                 console.log(e);

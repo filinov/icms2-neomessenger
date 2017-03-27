@@ -56,7 +56,7 @@ class onNeomessengerBeforePrintHead extends cmsAction {
 
         $template->restoreContext();
 
-        if (cmsCore::isControllerExists('nm_extends') && cmsController::enabled('nm_extends')) {
+        if ($this->isExtendsEnabled()) {
             $template->addControllerJS('nmextends.min', 'nm_extends');
         }
 
