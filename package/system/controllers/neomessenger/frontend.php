@@ -4,6 +4,9 @@ class neomessenger extends cmsFrontend {
 
     protected $useOptions = true;
 
+    private $is_extends_enabled = false;
+    private $is_extends_checked = false;
+
     /**
      * Все запросы могут быть выполнены только авторизованными и только по аякс
      * @param type $action_name
@@ -66,25 +69,31 @@ class neomessenger extends cmsFrontend {
      */
     public function isExtendsEnabled() {
 
+        if ($this->is_extends_checked) {
+            return $this->is_extends_enabled;
+        }
+
+        $this->is_extends_checked = true;
+
         if (!cmsCore::isControllerExists('nm_extends')) {
+            return false;
+        }
+
+        if (!$this->isControllerInstalled('nm_extends')) {
+            return false;
+        }
+
+        if (!cmsController::enabled('nm_extends')) {
             return false;
         }
 
         $controller = cmsCore::getController('nm_extends');
 
-        if (!$controller->isControllerInstalled('nm_extends')) {
-            return false;
-        }
-
-        if (!$controller->isEnabled()) {
-            return false;
-        }
-
         if (!$controller->isActivated()) {
             return false;
         }
 
-        return true;
+        return $this->is_extends_enabled = true;
 
     }
 

@@ -863,6 +863,10 @@ icms.neomessenger = (function ($) {
                         waitForAll: true
                     });
 
+                    setTimeout(function() {
+                        self.scroll();
+                    });
+
                     if (app.recipientId > 0) {
                         app.editor.focus();
                         app.recipientId = 0;
@@ -1252,7 +1256,11 @@ icms.neomessenger = (function ($) {
 
             var html = app.templates.mainModal({ soundEnabled: app.getSoundEnabled() });
 
-            $('body').append(html);
+            if ($('.mm-slideout').length) {
+                $('.mm-slideout').append(html);
+            } else {
+                $('body').append(html);
+            }
 
             this.$el = $('#nm-dialog');
             this.$bg = $('#nm-overlay');

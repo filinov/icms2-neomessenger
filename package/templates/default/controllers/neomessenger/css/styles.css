@@ -43,7 +43,7 @@ html.nm-opened body {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 99;
+  z-index: 500;
   overflow: hidden;
 }
 #nm-dialog {
@@ -579,7 +579,7 @@ li.selected .nm-online-status {
 
 .conversation-body > .msg-content {
   padding: 0;
-  display: inline-block;
+  display: block;
   max-width: 100%;
   word-wrap: break-word;
 }

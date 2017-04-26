@@ -12,7 +12,11 @@ class actionNeomessengerExtends extends cmsAction {
             ));
         }
 
-
+        if (!$this->isControllerInstalled('nm_extends')) {
+            return $template->render('backend/extends', array(
+                'text' => LANG_NM_EXTENDS_NOT_INSTALLED
+            ));
+        }
 
         if (!cmsController::enabled('nm_extends')) {
             return $template->render('backend/extends', array(

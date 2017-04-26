@@ -82,10 +82,8 @@
     define('LANG_NEOMESSENGER_CP_YANDEXMONEY',                   'YandexMoney');
     define('LANG_NEOMESSENGER_CP_DONATE_MESSAGE',                'Здравствуй друг! Если тебе понравился компонент, и ты хочешь что-бы он дальше развивался, и улучшался - поддержи компонент финансово, спасибо. Сумму ты можешь указать абсолютно любую.');
 
-
-
     define('LANG_NM_ENTER_MESSAGE',                              'Введите ваше сообщение...');
 
     define('LANG_NM_EXTENDS',                                    'Расширенные возможности');
-    define('LANG_NM_EXTENDS_NOT_INSTALLED',                      'Пакет дополнений <b>"Расширенные возможности"</b> не установлен, для его покупки и установки перейдите на <a href="#" target="_blank">страницу компонента</a>');
-    define('LANG_NM_EXTENDS_DISABLED',                           'Пакет дополнений <b>"Расширенные возможности"</b> отключен, включите его в панели управления компонентами.');
+    define('LANG_NM_EXTENDS_NOT_INSTALLED',                      'Пакет расширения для компонента <b>"Neomessenger"</b> не установлен, для его покупки и установки перейдите на <a href="http://addons.instantcms.ru/addons/neomessenger-extends.html" target="_blank">страницу пакета</a>');
+    define('LANG_NM_EXTENDS_DISABLED',                           'Пакет расширения для компонента <b>"Neomessenger"</b> отключен, включите его в панели управления компонентами.');
