@@ -44,8 +44,14 @@ class modelNeomessenger extends cmsModel {
                 'id'       => $item['from_id'],
                 'nickname' => $item['user_nickname'],
                 'url'      => href_to('users', $item['from_id']),
-                'avatar'   => html_avatar_image_src($item['user_avatar'], 'micro')
+                'avatar'   => array(
+                    'micro' => html_avatar_image_src($item['user_avatar'], 'micro'),
+                    'small' => html_avatar_image_src($item['user_avatar'], 'small')
+                )
             );
+
+            unset($item['user_nickname']);
+            unset($item['user_avatar']);
 
             $timestamp = strtotime($item['date_pub']);
 
@@ -101,8 +107,14 @@ class modelNeomessenger extends cmsModel {
                 'id'       => $item['from_id'],
                 'nickname' => $item['user_nickname'],
                 'url'      => href_to('users', $item['from_id']),
-                'avatar'   => html_avatar_image_src($item['user_avatar'], 'micro')
+                'avatar'   => array(
+                    'micro' => html_avatar_image_src($item['user_avatar'], 'micro'),
+                    'small' => html_avatar_image_src($item['user_avatar'], 'small')
+                )
             );
+
+            unset($item['user_nickname']);
+            unset($item['user_avatar']);
 
             $timestamp = strtotime($item['date_pub']);
 
@@ -136,7 +148,8 @@ class modelNeomessenger extends cmsModel {
 
         $this->select('u.id', 'id');
         $this->select('u.nickname', 'nickname');
-        $this->select('u.avatar', 'avatar');
+        $this->select('u.avatar', 'user_avatar');
+        $this->select('u.date_log', 'date_log');
         $this->select('u.is_admin', 'is_admin');
         $this->select('IFNULL(COUNT(m.id), 0)', 'new_messages');
 
@@ -156,7 +169,14 @@ class modelNeomessenger extends cmsModel {
             $item['id'] = (int)$item['contact_id'];
             $item['is_online'] = cmsUser::userIsOnline($item['contact_id']);
             $item['url'] = href_to('users', $item['contact_id']);
-            $item['avatar'] = html_avatar_image_src($item['avatar'], 'micro');
+
+            $item['avatar'] = array(
+                'micro' => html_avatar_image_src($item['user_avatar'], 'micro'),
+                'small' => html_avatar_image_src($item['user_avatar'], 'small')
+            );
+
+            unset($item['user_avatar']);
+
             $item['is_ignored'] = (bool)$model->isContactIgnored($user->id, $item['contact_id']);
 
             return $item;
@@ -217,6 +237,19 @@ class modelNeomessenger extends cmsModel {
         $count = $this->getCount('{users}_messages');
 
         return $count;
+
+    }
+
+    /**
+     * ID последнего не прочитанного сообщения
+     * @param $user_id
+     * @return int
+     */
+    public function getLastUnreadMessageId($user_id) {
+
+        $this->filterEqual('is_new', 1);
+
+        return $this->getLastMessageID($user_id);
 
     }
 

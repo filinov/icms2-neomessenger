@@ -1,16 +1,17 @@
 <div class="nm-contactpanel-contact">
-    <a href="<%= contact.url %>">
+    <a href="<%= contact.url %>" target="_blank">
         <div class="nm-contact-image-wrap">
-
-            <% if (contact.is_online) { %>
-                <div class="nm-online-status"></div>
-            <% } %>
 
             <div class="nm-contact-image">
                 <img src="<%= contact.avatar %>">
             </div>
 
-            <div class="nm-contact-nickname"><%= contact.nickname %></div>
+            <div class="nm-contact-info<% if (contact.is_online) { %> nm-online<% } %>">
+                <div class="nm-contact-nickname"><%= contact.nickname %></div>
+                <div class="nm-contact-online">online</div>
+                <div class="nm-contact-offline">offline</div>
+                <div class="nm-contact-typing">печатает<div class="nm-loading-dots"><i></i><i></i><i></i></div></div>
+            </div>
 
         </div>
     </a>

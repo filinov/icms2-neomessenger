@@ -1,10 +1,10 @@
 {
   "name": "neomessenger",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "description": "Messenger for InstantCMS 2.x",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/filinov/neomessenger-icms2.x.git"
+    "url": "git+https://github.com/filinov/icms2-neomessenger.git"
   },
   "author": "NEOm@ster",
   "devDependencies": {
