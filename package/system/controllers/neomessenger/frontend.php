@@ -7,6 +7,8 @@ class neomessenger extends cmsFrontend {
     private $is_extends_enabled = false;
     private $is_extends_checked = false;
 
+    public $extends_ctrl = null;
+
     /**
      * Все запросы могут быть выполнены только авторизованными и только по аякс
      * @param type $action_name
@@ -40,8 +42,7 @@ class neomessenger extends cmsFrontend {
         );
 
         if ($this->isExtendsEnabled()) {
-            $controller = cmsCore::getController('nm_extends');
-            $options['extends'] = $controller->getOptions();
+            $options['extends'] = $this->extends_ctrl->get_options();
         }
 
         return $options;
@@ -58,7 +59,10 @@ class neomessenger extends cmsFrontend {
         return array(
             'id'       => $user->id,
             'nickname' => $user->nickname,
-            'avatar'   => html_avatar_image_src($user->avatar, 'micro'),
+            'avatar'   => array(
+                'micro' => html_avatar_image_src($user->avatar, 'micro'),
+                'small' => html_avatar_image_src($user->avatar, 'small')
+            ),
             'is_admin' => $user->is_admin
         );
 
@@ -87,9 +91,9 @@ class neomessenger extends cmsFrontend {
             return false;
         }
 
-        $controller = cmsCore::getController('nm_extends');
+        $this->extends_ctrl = cmsCore::getController('nm_extends');
 
-        if (!$controller->isActivated()) {
+        if (!$this->extends_ctrl->isActivated()) {
             return false;
         }
 
@@ -103,9 +107,8 @@ class neomessenger extends cmsFrontend {
     public function getHtmlEditor() {
 
         if ($this->isExtendsEnabled()) {
-            $controller = cmsCore::getController('nm_extends');
-            if ($controller->editorEnabled()) {
-                return $controller->getEditor();
+            if ($this->extends_ctrl->editorEnabled()) {
+                return $this->extends_ctrl->getEditor();
             }
         }
 

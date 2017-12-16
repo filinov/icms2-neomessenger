@@ -6,20 +6,11 @@ class onNeomessengerBeforePrintHead extends cmsAction {
 
         $user = cmsUser::getInstance();
 
-        if (!$user->is_logged) {
-            return $template;
-        }
-
-        if ($template->getLayout() === "admin") {
-            return $template;
-        }
-
-        if (!$user->isInGroups($this->options['groups_allowed'])) {
-            return $template;
-        }
+        if (!$user->is_logged) { return $template; }
+        if (!$user->isInGroups($this->options['groups_allowed'])) { return $template; }
 
         $this->appConfiguration();
-        $this->addFilesToPage();
+        $this->addAssetsToPage();
         $this->applyStyle();
         $this->addLangJS();
 
@@ -41,7 +32,7 @@ class onNeomessengerBeforePrintHead extends cmsAction {
 
     }
 
-    private function addFilesToPage() {
+    private function addAssetsToPage() {
 
         $template = cmsTemplate::getInstance();
 
@@ -57,7 +48,7 @@ class onNeomessengerBeforePrintHead extends cmsAction {
         $template->restoreContext();
 
         if ($this->isExtendsEnabled()) {
-            $template->addControllerJS('nmextends.min', 'nm_extends');
+            cmsCore::getController('nm_extends')->addAssetsToPage();
         }
 
     }

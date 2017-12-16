@@ -21,11 +21,14 @@ class actionNeomessengerGetUpdate extends cmsAction {
             $messages = $extends_ctrl->prepareMessages($messages);
         }
 
+        $lastUnreadMessageId = $this->model->getLastUnreadMessageId($user->id);
+
         cmsTemplate::getInstance()->renderJSON(array(
             'error' => false,
             'contacts' => $contacts,
             'messages' => $messages,
-            'messagesCount' => $messages_count
+            'messagesCount' => $messages_count,
+            'lastUnreadMessageId' => $lastUnreadMessageId
         ));
 
     }

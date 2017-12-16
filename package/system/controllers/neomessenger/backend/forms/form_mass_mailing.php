@@ -8,11 +8,10 @@ class formNeomessengerMassMailing extends cmsForm {
 
             array(
                 'type' => 'fieldset',
-                'title' => LANG_FILTERS,
+                'title' => LANG_NEOMESSENGER_CP_SEND_GROUPS_ALLOW_ONLY,
                 'childs' => array(
 
                     new fieldListGroups('groups', array(
-                        'title' => LANG_NEOMESSENGER_CP_SEND_GROUPS_ALLOW_ONLY,
                         'show_all' => true,
                         'rules' => array(
                             array('required')

@@ -6,6 +6,7 @@
     $this->renderForm($form, $mailing, array(
         'action' => '',
         'method' => 'post',
+        'prepend_html' => $filter,
         'submit' => array(
             'title' => LANG_SUBMIT
         )

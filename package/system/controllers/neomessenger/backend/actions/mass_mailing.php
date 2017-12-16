@@ -31,7 +31,10 @@ class actionNeomessengerMassMailing extends cmsAction {
 
                 if (!$errors) {
 
-                    $users_model->resetFilters();
+                    $filters = $this->request->get('filters', array());
+
+                    $users_model->resetFilters()->applyDatasetFilters(array('filters' => $filters));
+                    $users_model->filterNotEqual('id', $user->id);
 
                     if ($mailing['groups'] && $mailing['groups'][0] > 0) {
                         $users_model->filterGroups($mailing['groups']);
@@ -40,16 +43,8 @@ class actionNeomessengerMassMailing extends cmsAction {
                     $recipients = $users_model->getUsersIds();
 
                     if ($recipients) {
-                        $recipients = $recipients ? array_keys($recipients) : false;
-                        if (($key = array_search($user->id, $recipients)) !== FALSE) {
-                            unset($recipients[$key]);
-                        }
-                    }
 
-                    if ($recipients) {
-
-                        $messenger->addRecipients($recipients);
-
+                        $messenger->addRecipients(array_keys($recipients));
                         $messenger->setSender($user->id);
 
                         if ($mailing['send_type'] === 'message') {
@@ -94,11 +89,37 @@ class actionNeomessengerMassMailing extends cmsAction {
 
         }
 
-        return cmsTemplate::getInstance()->render('backend/mass_mailing', array(
-            'mailing'  => $mailing,
-            'form'     => $form,
-            'errors'   => isset($errors) ? $errors : false
+        $filterForm = cmsTemplate::getInstance()->render('backend/users_filter', array(
+            'fields' => $this->getUserFields()
         ));
+
+        return cmsTemplate::getInstance()->render('backend/mass_mailing', array(
+            'mailing' => $mailing,
+            'form'    => $form,
+            'filter'  => $filterForm,
+            'errors'  => isset($errors) ? $errors : false
+        ));
+
+    }
+
+    private function getUserFields() {
+
+        $content_model = cmsCore::getModel('content')->setTablePrefix('');
+        $fields  = $content_model->getContentFields('users');
+
+        $fields[] = array(
+            'title' => LANG_RATING,
+            'name' => 'rating',
+            'handler' => new fieldNumber('rating')
+        );
+
+        $fields[] = array(
+            'title' => LANG_KARMA,
+            'name' => 'karma',
+            'handler' => new fieldNumber('karma')
+        );
+
+        return $fields;
 
     }
 

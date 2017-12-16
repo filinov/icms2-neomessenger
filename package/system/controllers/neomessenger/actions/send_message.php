@@ -49,7 +49,11 @@ class actionNeomessengerSendMessage extends cmsAction {
         }
 
         // Отправляем сообщение
-        $content_html = cmsEventsManager::hook('html_filter', $content);
+        $content_html = cmsEventsManager::hook('html_filter', array(
+            'text' => $content,
+            'is_auto_br' => true,
+            'build_smiles' => $extends_ctrl && $extends_ctrl->editorEnabled() ? false : true
+        ));
 
         if ($content_html) {
 

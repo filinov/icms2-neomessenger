@@ -49,9 +49,11 @@ icms.neomessenger = (function ($) {
         };
 
         this.destroy = function () {
-            this.field.off('keydown', this.onKeydown);
-            this.field.off('change', this.onChange);
-            this.submitBtn.off('click', this.onSubmit);
+            if (this.field) {
+                this.field.off('keydown', this.onKeydown);
+                this.field.off('change', this.onChange);
+                this.submitBtn.off('click', this.onSubmit);
+            }
         };
 
         this.onKeydown = function (e) {
@@ -86,7 +88,9 @@ icms.neomessenger = (function ($) {
     }).call({});
 
     this.renderMessage = function (message) {
-        return nm.templates.message({ message: message });
+        return nm.templates.message({
+            message: message
+        });
     };
 
     return this;

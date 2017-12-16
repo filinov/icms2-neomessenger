@@ -67,7 +67,7 @@
     define('LANG_NEOMESSENGER_CP_MARKITUP_BTN_BG_COLOR',         'Цвет фона bb кнопок редактора при наведении');
 
     define('LANG_NEOMESSENGER_CP_MASS_MAILING',                  'Массовая рассылка сообщений');
-    define('LANG_NEOMESSENGER_CP_SEND_GROUPS_ALLOW_ONLY',        'Отправить группе пользователей');
+    define('LANG_NEOMESSENGER_CP_SEND_GROUPS_ALLOW_ONLY',        'Группа пользователей');
     define('LANG_NEOMESSENGER_CP_SEND_METHOD',                   'Способ доставки');
     define('LANG_NEOMESSENGER_CP_MESSAGE',                       'Как личное сообщение');
     define('LANG_NEOMESSENGER_CP_NOT_RECIPIENTS',                'Нет получателей по заданным критериям');
@@ -87,3 +87,5 @@
     define('LANG_NM_EXTENDS',                                    'Расширенные возможности');
     define('LANG_NM_EXTENDS_NOT_INSTALLED',                      'Пакет расширения для компонента <b>"Neomessenger"</b> не установлен, для его покупки и установки перейдите на <a href="http://addons.instantcms.ru/addons/neomessenger-extends.html" target="_blank">страницу пакета</a>');
     define('LANG_NM_EXTENDS_DISABLED',                           'Пакет расширения для компонента <b>"Neomessenger"</b> отключен, включите его в панели управления компонентами.');
+
+    define('LANG_DEBUG_TAB_NEOMESSENGER',                        'Neomessenger');
